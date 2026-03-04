@@ -437,6 +437,60 @@
 .btn.small{padding:10px 14px; border-radius:12px; font-weight:900;}
 .btn.soft{background: rgba(20,118,255,.12); border:1px solid rgba(20,118,255,.22); color: #0b5fe0;}
 .btn.soft:hover{transform: translateY(-1px); border-color: rgba(20,118,255,.35);}
+    /* ============ FOOTER: MOBILE FIX ============ */
+@media (max-width: 768px){
+  footer .footer-grid{
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    text-align: left;
+  }
+
+  footer .footer-brand{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  footer .footer-brand img{
+    height: 52px;
+    width: auto;
+    border-radius: 10px;
+    background: transparent;
+  }
+
+  footer .footer-brand h3{
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  footer .footer-brand p{
+    margin-top: 8px;
+    max-width: 32ch;
+    line-height: 1.5;
+    opacity: .9;
+  }
+
+  footer .footer-col h4{
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    letter-spacing: .12em;
+  }
+
+  footer .footer-col a{
+    display: inline-block;
+    padding: 6px 0;
+  }
+
+  footer .footer-bottom{
+    margin-top: 18px;
+    padding-top: 14px;
+    text-align: center;
+    font-size: 13px;
+    opacity: .85;
+  }
+}
   </style>
 </head>
 
@@ -532,7 +586,7 @@ target="_blank"aria-label="Llamar">
             </svg>
           </div>
           <h3>Piscinas</h3>
-          <p>Construcción residencial y comercial — desde diseños modernos hasta estilo resort.</p>
+          <p>Diseñamos y construimos la piscina que siempre has imaginado, adaptada a tu espacio, tu estilo y las necesidades de tu familia.</p>
         </article>
 
         <article class="card">
@@ -775,46 +829,45 @@ target="_blank"aria-label="Llamar">
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-     <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" style="height:120px;width:auto;" />
-            <div style="font-weight:900; font-size:16px;">LCS Builder &amp; Developer LLC</div>
-          </div>
-          <div class="footer-note">
-            Contratista general. Comprometidos con calidad, seguridad y entregas a tiempo.
-          </div>
-        </div>
+ <footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
 
-        <div>
-          <div class="footer-title">Enlaces rápidos</div>
-          <div class="footer-links">
-            <a href="#servicios">Servicios</a>
-            <a href="#proyectos">Proyectos</a>
-            <a href="#nosotros">Sobre</a>
-            <a href="#contacto">Contacto</a>
-          </div>
+      <div class="footer-col">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+          <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" style="height:120px;width:auto;" />
+          <div style="font-weight:900; font-size:16px;">LCS Builder & Developer LLC</div>
         </div>
-
-        <div>
-          <div class="footer-title">Certificaciones</div>
-          <div class="footer-links">
- 
-            <a href="#" onclick="return false;">Licencia de Corredor de Bienes Raices </a>
-            <a href="#" onclick="return false;">Licencia de Contratista </a>
-          
-          </div>
+        <div class="footer-note">
+          Contratista general. Comprometidos con calidad, seguridad y entregas a tiempo.
         </div>
       </div>
 
-      <div class="copyright">
-        © <span id="year"></span> LCS Builder &amp; Developer LLC. Todos los derechos reservados.
+      <div class="footer-col">
+        <div class="footer-title">Enlaces rápidos</div>
+        <div class="footer-links">
+          <a href="#servicios">Servicios</a>
+          <a href="#proyectos">Proyectos</a>
+          <a href="#nosotros">Sobre</a>
+          <a href="#contacto">Contacto</a>
+        </div>
       </div>
+
+      <div class="footer-col">
+        <div class="footer-title">Certificaciones</div>
+        <div class="footer-links">
+          <a href="#" onclick="return false;">Licencia de Corredor de Bienes Raices</a>
+          <a href="#" onclick="return false;">Licencia de Contratista</a>
+        </div>
+      </div>
+
     </div>
-  </footer>
+
+    <div class="footer-bottom">
+      © <span id="year"></span> LCS Builder & Developer LLC. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
 
  <script>
   document.getElementById("year").textContent = new Date().getFullYear();
