@@ -1,509 +1,739 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LCS Builder & Developer — Construcción que perdura</title>
   <meta name="description" content="Construcción comercial, residencial e industrial. Planos y permisos. Cotiza gratis con LCS Builder & Developer." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --nav:#243241;
-      --bg:#0b1220;
-      --paper:#ffffff;
-      --muted:#6b7280;
-      --text:#0f172a;
-      --line:#e5e7eb;
-      --card:#f4f6f8;
-      --brand:#1476ff;
-      --brand2:#0b5fe0;
-      --shadow: 0 18px 50px rgba(15, 23, 42, .10);
-      --shadow2: 0 16px 30px rgba(15, 23, 42, .08);
-      --radius: 16px;
-      --radius2: 22px;
-      --max: 1180px;
-      --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:#0b1220;
-    }
-    a{color:inherit;text-decoration:none}
-    .container{width:min(var(--max), calc(100% - 48px)); margin:0 auto;}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px;
-      padding:12px 18px;
-      border-radius:12px;
-      font-weight:700;
-      border:1px solid transparent;
-      transition:.2s ease;
-      cursor:pointer;
-      user-select:none;
-      white-space:nowrap;
-    }
-    .btn.primary{background:var(--brand); color:#fff; box-shadow:0 14px 26px rgba(20,118,255,.22);}
-    .btn.primary:hover{background:var(--brand2); transform:translateY(-1px)}
-    .btn.ghost{background:transparent; color:#eaf2ff; border-color:rgba(255,255,255,.18)}
-    .btn.ghost:hover{border-color:rgba(255,255,255,.35); transform:translateY(-1px)}
-    .chip{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(20,118,255,.16);
-      border:1px solid rgba(20,118,255,.28);
-      color:#d7e9ff;
-      font-weight:700;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      font-size:12px;
+    :root {
+      --blue: #1476ff;
+      --blue-dark: #0b5fe0;
+      --blue-glow: rgba(20,118,255,0.22);
+      --navy: #080e1a;
+      --navy2: #0d1525;
+      --navy3: #111e35;
+      --navy4: #162440;
+      --steel: #1c2d47;
+      --text: #f0f4ff;
+      --muted: rgba(200,215,240,0.55);
+      --line: rgba(255,255,255,0.07);
+      --gold: #f0a500;
+      --max: 1200px;
     }
 
-    /* NAV */
-    .nav{
-      position:sticky; top:0; z-index:30;
-      background:linear-gradient(0deg, rgba(36,50,65,.92), rgba(36,50,65,.92));
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .nav-row{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
-      gap:18px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      color:#f8fafc;
-      font-weight:800;
-    }
-    .brand img{
-  width:100px;
-  height:100px;
-  border-radius:8px;
-  object-fit:contain;
-  background:transparent;
-  border:none;
-}
-    .nav-links{
-      display:flex; align-items:center; gap:22px;
-      color:rgba(255,255,255,.75);
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:12px;
-    }
-    .nav-links a:hover{color:#fff}
-    .nav-cta{display:flex; align-items:center; gap:12px}
-    .phone-pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 14px;
-      border-radius:12px;
-      background:var(--brand);
-      color:#fff; font-weight:900;
-      box-shadow:0 14px 26px rgba(20,118,255,.20);
-    }
-    .phone-pill svg{width:18px;height:18px}
-    .menu-btn{display:none}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-    /* HERO */
-    .hero{
-      position:relative;
-      min-height:78vh;
-      display:flex; align-items:center;
-      overflow:hidden;
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { width: min(var(--max), calc(100% - 3rem)); margin: 0 auto; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.from-left  { transform: translateX(-36px); }
+    .reveal.from-right { transform: translateX(36px); }
+    .reveal.scale-in   { transform: scale(0.94); }
+    .reveal.visible    { opacity: 1; transform: none; }
+    .delay-1 { transition-delay: .1s; }
+    .delay-2 { transition-delay: .2s; }
+    .delay-3 { transition-delay: .3s; }
+    .delay-4 { transition-delay: .4s; }
+    .delay-5 { transition-delay: .5s; }
+    .delay-6 { transition-delay: .6s; }
+
+    /* ── NAV ── */
+    #mainNav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
+      padding: 1.2rem 0;
+      transition: all 0.4s ease;
+    }
+    #mainNav.scrolled {
+      background: rgba(8,14,26,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      padding: 0.7rem 0;
+    }
+    .nav-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .brand img {
+      width: 56px; height: 56px; object-fit: contain; border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+    .brand:hover img { transform: scale(1.06); }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .brand-name span { display: block; font-size: 0.65rem; font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); margin-top: 2px; }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2.2rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    .nav-links a { position: relative; transition: color 0.3s; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--blue);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta { display: flex; align-items: center; gap: 0.75rem; }
+    .phone-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue); color: #fff;
+      padding: 0.6rem 1.1rem; border-radius: 10px;
+      font-size: 0.82rem; font-weight: 700;
+      box-shadow: 0 8px 24px var(--blue-glow);
+      transition: all 0.3s ease;
+    }
+    .phone-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 12px 30px var(--blue-glow); }
+    .phone-btn svg { width: 16px; height: 16px; }
+
+    .menu-btn {
+      display: none; padding: 0.55rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid var(--line);
+      color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .menu-btn:hover { background: rgba(255,255,255,0.12); }
+
+    #mobileMenu {
+      display: none;
+      padding: 0.5rem 0 1rem;
+      border-top: 1px solid var(--line);
+      margin-top: 0.5rem;
+    }
+    #mobileMenu.open { display: block; }
+    #mobileMenu a {
+      display: block; padding: 0.6rem 0;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      border-bottom: 1px solid var(--line);
+      transition: color 0.2s;
+    }
+    #mobileMenu a:hover { color: var(--blue); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
       background:
-        radial-gradient(900px 380px at 20% 15%, rgba(20,118,255,.25), transparent 60%),
-        radial-gradient(800px 360px at 80% 25%, rgba(255,255,255,.10), transparent 60%),
-        linear-gradient(180deg, rgba(5,10,18,.35), rgba(5,10,18,.92)),
-        url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2200&q=70");
-      background-size:cover;
-      background-position:center;
+        url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2200&q=70')
+        center/cover no-repeat;
+      animation: heroZoom 16s ease-in-out infinite alternate;
     }
-    .hero::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(90deg, rgba(8,14,24,.94) 0%, rgba(8,14,24,.78) 45%, rgba(8,14,24,.40) 100%);
-      pointer-events:none;
-    }
-    .hero .container{position:relative; z-index:2}
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:40px;
-      padding:72px 0 56px;
-      align-items:end;
-    }
-    .hero h1{
-      margin:16px 0 10px;
-      font-family:var(--serif);
-      font-size: clamp(44px, 5vw, 72px);
-      line-height:1.03;
-      color:#fff;
-      letter-spacing:-.02em;
-    }
-    .hero h1 .accent{
-      color:#2c8bff;
-      font-style:italic;
-      font-weight:900;
-    }
-    .hero p{
-      margin:12px 0 0;
-      color:rgba(255,255,255,.72);
-      font-size:16px;
-      line-height:1.6;
-      max-width:56ch;
-    }
-    .hero-actions{
-      margin-top:26px;
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
+    @keyframes heroZoom {
+      from { transform: scale(1.03); }
+      to   { transform: scale(1.1); }
     }
 
-    /* SECTIONS */
-    .section{
-      background:var(--paper);
-      padding:72px 0;
-    }
-    .section.alt{
-      background:#eef2f6;
-    }
-    .kicker{
-      color:var(--brand);
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      font-weight:900;
-      font-size:12px;
-      margin-bottom:8px;
-    }
-    .section h2{
-      font-family:var(--serif);
-      font-size: clamp(34px, 3.2vw, 54px);
-      line-height:1.05;
-      margin:0 0 22px;
-      letter-spacing:-.02em;
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg,
+        rgba(8,14,26,0.97) 0%,
+        rgba(8,14,26,0.82) 50%,
+        rgba(8,14,26,0.45) 100%);
     }
 
-    /* SERVICES */
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:18px;
-      margin-top:18px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:22px;
-      box-shadow: var(--shadow2);
-      transition:.2s ease;
-      min-height:190px;
-    }
-    .card:hover{transform:translateY(-3px); box-shadow:var(--shadow)}
-    .icon{
-      width:44px; height:44px;
-      border-radius:12px;
-      display:grid; place-items:center;
-      background:rgba(20,118,255,.12);
-      border:1px solid rgba(20,118,255,.18);
-      color:var(--brand);
-      margin-bottom:14px;
-    }
-    .card h3{
-      margin:0 0 8px;
-      font-family:var(--serif);
-      font-size:20px;
-    }
-    .card p{margin:0; color:var(--muted); line-height:1.6}
-
-    /* STATS */
-    .stats{
-      background:var(--nav);
-      color:#fff;
-      padding:56px 0;
-    }
-    .stats-grid{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:18px;
-      align-items:center;
-    }
-    .stat{
-      text-align:center;
-      padding:12px 10px;
-    }
-    .stat .num{
-      font-family:var(--serif);
-      font-size:48px;
-      font-weight:900;
-      color:#2c8bff;
-      line-height:1;
-      margin-bottom:6px;
-    }
-    .stat .lbl{
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-weight:800;
-      font-size:12px;
-      color:rgba(255,255,255,.75);
+    /* Diagonal accent stripe */
+    .hero-stripe {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(135deg,
+        transparent 60%,
+        rgba(20,118,255,0.04) 100%);
     }
 
-    /* PROJECTS */
-    .projects{
-      display:grid;
+    /* Animated grid lines */
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .hero-grid-lines::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(20,118,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20,118,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.3) 70%, transparent);
+    }
+
+    .hero .container { position: relative; z-index: 2; }
+
+    .hero-inner {
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem; align-items: center;
+      padding: 9rem 0 5rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .eyebrow-line { width: 32px; height: 1px; background: var(--blue); }
+    .hero-eyebrow span {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--blue);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.04;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 .accent {
+      color: var(--blue);
+      font-style: italic;
+    }
+
+    .hero-sub {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.7; max-width: 50ch;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue); color: #fff;
+      padding: 0.85rem 1.8rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      box-shadow: 0 14px 32px var(--blue-glow);
+      transition: all 0.35s ease;
+      position: relative; overflow: hidden; border: none; cursor: pointer;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left 0.45s ease;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 18px 40px var(--blue-glow); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: rgba(255,255,255,0.85);
+      padding: 0.85rem 1.8rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: #fff; transform: translateY(-1px); }
+
+    .hero-badges {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .hero-badge {
+      display: flex; align-items: center; gap: 0.9rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 1rem 1.2rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+    .hero-badge:hover {
+      background: rgba(20,118,255,0.08);
+      border-color: rgba(20,118,255,0.2);
+      transform: translateX(4px);
+    }
+    .badge-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(20,118,255,0.15);
+      border: 1px solid rgba(20,118,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .badge-text strong { display: block; font-size: 0.88rem; font-weight: 700; color: #fff; }
+    .badge-text span { font-size: 0.75rem; color: var(--muted); }
+
+    /* scroll indicator */
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-indicator span { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+    .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent); }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SERVICES ── */
+    .services-section { background: #fff; padding: 6rem 0; position: relative; overflow: hidden; }
+    .services-section::before {
+      content: 'SERVICIOS';
+      position: absolute; top: 50%; right: -1rem;
+      transform: translateY(-50%) rotate(90deg);
+      font-family: 'Playfair Display', serif;
+      font-size: 7rem; font-weight: 900;
+      color: rgba(20,118,255,0.04);
+      letter-spacing: 0.2em; pointer-events: none; white-space: nowrap;
+    }
+
+    .section-kicker {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;
+    }
+    .kicker-line { width: 28px; height: 2px; background: var(--blue); }
+    .section-kicker span {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 700; line-height: 1.1;
+      color: var(--navy); letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--blue); }
+
+    .services-grid {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:18px;
-      margin-top:22px;
-    }
-    .project{
-      background:#fff;
-      border-radius:var(--radius2);
-      overflow:hidden;
-      border:1px solid var(--line);
-      box-shadow: var(--shadow2);
-      transition:.2s ease;
-    }
-    .project:hover{transform:translateY(-3px); box-shadow:var(--shadow)}
-    .thumb{height:240px; background:#d1d5db; overflow:hidden}
-    .thumb img{width:100%; height:100%; object-fit:cover; display:block}
-    .proj-body{padding:18px 18px 20px}
-    .tag{
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      font-weight:900;
-      font-size:11px;
-      color:var(--brand);
-      margin-bottom:8px;
-    }
-    .proj-body h3{
-      margin:0 0 8px;
-      font-family:var(--serif);
-      font-size:22px;
-    }
-    .proj-body p{margin:0; color:var(--muted); line-height:1.6}
-
-    /* CONTACT */
-    .contact-grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:24px;
-      align-items:start;
-      margin-top:18px;
-    }
-    form{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      padding:18px;
-      box-shadow: var(--shadow2);
-    }
-    .fields{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    .field{display:flex; flex-direction:column; gap:8px}
-    label{font-weight:800; font-size:12px; color:#334155; letter-spacing:.06em; text-transform:uppercase}
-    input, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#f8fafc;
-      outline:none;
-      font:inherit;
-    }
-    input:focus, textarea:focus{border-color:rgba(20,118,255,.55); box-shadow:0 0 0 4px rgba(20,118,255,.12)}
-    textarea{min-height:130px; resize:vertical}
-    .form-actions{margin-top:14px}
-
-    .contact-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      padding:18px;
-      box-shadow: var(--shadow2);
-    }
-    .contact-item{
-      display:flex;
-      gap:12px;
-      padding:12px 0;
-      border-bottom:1px solid var(--line);
-    }
-    .contact-item:last-child{border-bottom:none}
-    .contact-item .mini{
-      width:38px;height:38px;border-radius:12px;
-      display:grid; place-items:center;
-      background:rgba(20,118,255,.12);
-      border:1px solid rgba(20,118,255,.18);
-      color:var(--brand);
-      flex:0 0 auto;
-    }
-    .contact-item h4{margin:0 0 2px; font-weight:900}
-    .contact-item p{margin:0; color:var(--muted); line-height:1.5}
-
-    /* FOOTER */
-    footer{
-      background:var(--nav);
-      color:#fff;
-      padding:46px 0 22px;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-    .footer-grid{
-      display:grid;
-      grid-template-columns: 1.3fr 1fr 1fr;
-      gap:18px;
-      align-items:start;
-    }
-    .footer-note{color:rgba(255,255,255,.72); line-height:1.6; max-width:52ch}
-    .footer-title{
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-weight:900;
-      font-size:12px;
-      color:rgba(255,255,255,.75);
-      margin-bottom:10px;
-    }
-    .footer-links a{
-      display:block;
-      padding:8px 0;
-      color:rgba(255,255,255,.8);
-      font-weight:700;
-    }
-    .footer-links a:hover{color:#fff}
-    .copyright{
-      margin-top:26px;
-      padding-top:18px;
-      border-top:1px solid rgba(255,255,255,.10);
-      color:rgba(255,255,255,.65);
-      text-align:center;
-      font-weight:700;
-      font-size:13px;
+      gap: 1.5px;
+      background: rgba(20,118,255,0.1);
+      margin-top: 3rem;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 980px){
-      .nav-links{display:none}
-      .menu-btn{
-        display:inline-flex;
-        padding:10px 12px;
-        border-radius:12px;
-        background:rgba(255,255,255,.08);
-        border:1px solid rgba(255,255,255,.12);
-        color:#fff;
-        font-weight:900;
-      }
-      .hero-grid{grid-template-columns:1fr; padding:62px 0 48px}
-      .cards{grid-template-columns:1fr 1fr}
-      .stats-grid{grid-template-columns:1fr 1fr}
-      .projects{grid-template-columns:1fr}
-      .contact-grid{grid-template-columns:1fr}
-      .fields{grid-template-columns:1fr}
-      .nav-cta .btn.ghost{display:none}
+    .service-card {
+      background: #fff; padding: 2.5rem 2rem;
+      position: relative; cursor: default;
+      transition: all 0.4s ease;
     }
-    @media (max-width: 520px){
-      .cards{grid-template-columns:1fr}
-      .phone-pill{padding:10px 12px}
-      .brand span{display:none}
+    .service-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 3px; background: var(--blue);
+      transition: width 0.4s ease;
     }
-.card ul{
-  margin: 12px 0 0;
-  padding-left: 18px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.card .mini-cta{
-  margin-top: 14px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.btn.small{padding:10px 14px; border-radius:12px; font-weight:900;}
-.btn.soft{background: rgba(20,118,255,.12); border:1px solid rgba(20,118,255,.22); color: #0b5fe0;}
-.btn.soft:hover{transform: translateY(-1px); border-color: rgba(20,118,255,.35);}
-    /* ============ FOOTER: MOBILE FIX ============ */
-@media (max-width: 768px){
-  footer .footer-grid{
-    display: grid;
-    grid-template-columns: 1fr !important;
-    gap: 18px !important;
-    text-align: left;
-  }
+    .service-card:hover { background: #f4f8ff; transform: translateY(-5px); box-shadow: 0 20px 50px rgba(20,118,255,0.1); }
+    .service-card:hover::after { width: 100%; }
 
-  footer .footer-brand{
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
+    .service-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem; font-weight: 900;
+      color: rgba(20,118,255,0.08); line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .service-icon {
+      width: 46px; height: 46px; border-radius: 12px;
+      background: rgba(20,118,255,0.1); border: 1px solid rgba(20,118,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue); margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 0.6rem; line-height: 1.2;
+    }
+    .service-card p { font-size: 0.85rem; color: #64748b; line-height: 1.75; }
 
-  footer .footer-brand img{
-    height: 52px;
-    width: auto;
-    border-radius: 10px;
-    background: transparent;
-  }
+    .service-card ul {
+      margin-top: 0.8rem; padding-left: 1rem;
+      font-size: 0.82rem; color: #64748b; line-height: 1.8;
+    }
+    .service-mini-cta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .btn-sm-primary {
+      display: inline-flex; align-items: center;
+      background: var(--blue); color: #fff;
+      padding: 0.5rem 1rem; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 700;
+      transition: all 0.3s; border: none; cursor: pointer; text-decoration: none;
+    }
+    .btn-sm-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .btn-sm-ghost {
+      display: inline-flex; align-items: center;
+      background: rgba(20,118,255,0.08); color: var(--blue);
+      padding: 0.5rem 1rem; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 700; border: 1px solid rgba(20,118,255,0.2);
+      transition: all 0.3s; cursor: pointer; text-decoration: none;
+    }
+    .btn-sm-ghost:hover { background: rgba(20,118,255,0.14); transform: translateY(-1px); }
 
-  footer .footer-brand h3{
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.2;
-  }
+    /* ── STATS ── */
+    .stats-section { background: var(--navy2); padding: 5rem 0; position: relative; overflow: hidden; }
+    .stats-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(600px at 20% 50%, rgba(20,118,255,0.08), transparent),
+        radial-gradient(400px at 80% 50%, rgba(20,118,255,0.05), transparent);
+      pointer-events: none;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px; background: rgba(255,255,255,0.05);
+    }
+    .stat-card {
+      background: var(--navy2); padding: 3rem 2rem; text-align: center;
+      transition: background 0.3s;
+    }
+    .stat-card:hover { background: var(--navy3); }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem; font-weight: 900;
+      color: var(--blue); line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted);
+    }
 
-  footer .footer-brand p{
-    margin-top: 8px;
-    max-width: 32ch;
-    line-height: 1.5;
-    opacity: .9;
-  }
+    /* ── PROJECTS ── */
+    .projects-section { background: var(--navy3); padding: 6rem 0; }
 
-  footer .footer-col h4{
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    letter-spacing: .12em;
-  }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px; background: rgba(255,255,255,0.04);
+      margin-top: 3rem;
+    }
+    .project-card {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 4/3;
+    }
+    .project-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.25,1,0.5,1);
+    }
+    .project-card:hover img { transform: scale(1.1); }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,14,26,0.92) 0%, transparent 60%);
+      opacity: 0.7; transition: opacity 0.4s;
+    }
+    .project-card:hover .project-overlay { opacity: 1; }
+    .project-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      transform: translateY(4px); transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-info { transform: translateY(0); }
+    .project-tag {
+      display: inline-block; background: var(--blue);
+      color: #fff; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem; margin-bottom: 0.4rem;
+    }
+    .project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: #fff;
+      line-height: 1.2;
+    }
+    .project-desc { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.3rem; line-height: 1.5; }
+    .project-zoom {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.9rem;
+      opacity: 0; transform: scale(0.8);
+      transition: all 0.3s ease;
+    }
+    .project-card:hover .project-zoom { opacity: 1; transform: scale(1); }
 
-  footer .footer-col a{
-    display: inline-block;
-    padding: 6px 0;
-  }
+    /* ── ABOUT ── */
+    .about-section { background: var(--navy2); padding: 6rem 0; position: relative; overflow: hidden; }
+    .about-section::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 45%; height: 100%;
+      background: linear-gradient(135deg, transparent 0%, rgba(20,118,255,0.04) 100%);
+      pointer-events: none;
+    }
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .about-left .section-title { color: #fff; }
+    .about-desc {
+      font-size: 0.92rem; color: var(--muted);
+      line-height: 1.85; margin: 1.5rem 0 2rem;
+    }
+    .about-features { display: flex; flex-direction: column; gap: 1rem; }
+    .about-feat {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+    }
+    .feat-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 1px solid var(--blue);
+      background: rgba(20,118,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .feat-dot::after {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--blue);
+    }
+    .about-feat span { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.6; }
+    .about-feat strong { color: #fff; display: block; font-size: 0.9rem; font-weight: 700; }
 
-  footer .footer-bottom{
-    margin-top: 18px;
-    padding-top: 14px;
-    text-align: center;
-    font-size: 13px;
-    opacity: .85;
-  }
-}
+    .about-right {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5px; background: rgba(20,118,255,0.12);
+    }
+    .about-stat {
+      background: var(--navy3); padding: 2.5rem 1.5rem; text-align: center;
+      transition: background 0.3s;
+    }
+    .about-stat:hover { background: var(--navy4); }
+    .about-stat .big {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 900; color: var(--blue);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .about-stat .lbl { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .about-quote {
+      grid-column: span 2;
+      background: rgba(20,118,255,0.06);
+      padding: 2rem;
+    }
+    .about-quote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1rem;
+      color: rgba(255,255,255,0.6); line-height: 1.7;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section { background: #fff; padding: 6rem 0; position: relative; overflow: hidden; }
+    .contact-section::before {
+      content: 'CONTACTO'; position: absolute; bottom: -1rem; left: -1rem;
+      font-family: 'Playfair Display', serif; font-size: 7rem; font-weight: 900;
+      color: rgba(20,118,255,0.04); letter-spacing: 0.2em;
+      pointer-events: none; white-space: nowrap;
+    }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1.1fr;
+      gap: 4rem; align-items: start;
+    }
+    .contact-section .section-title { color: var(--navy); }
+    .contact-section .section-kicker span { color: var(--blue); }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .info-item {
+      display: flex; align-items: center; gap: 0.9rem;
+    }
+    .info-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(20,118,255,0.1); border: 1px solid rgba(20,118,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue); flex-shrink: 0;
+    }
+    .info-text strong { display: block; font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-bottom: 0.1rem; }
+    .info-text span { font-size: 0.82rem; color: #64748b; }
+    .info-text a { color: var(--blue); }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--navy);
+      transition: color 0.2s;
+    }
+    .form-group:focus-within .form-label { color: var(--blue); }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(20,118,255,0.15);
+      background: #f8faff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; color: var(--navy);
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(20,118,255,0.1);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: #94a3b8; }
+    .form-select {
+      appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231476ff' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1rem center;
+    }
+    .form-textarea { resize: vertical; min-height: 130px; }
+    .form-submit {
+      align-self: flex-start;
+      background: var(--blue); color: #fff;
+      padding: 0.9rem 2.2rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700;
+      border: none; cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: all 0.35s ease;
+    }
+    .form-submit::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left 0.45s ease;
+    }
+    .form-submit:hover::before { left: 100%; }
+    .form-submit:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 12px 28px var(--blue-glow); }
+    .form-submit.loading { pointer-events: none; opacity: 0.7; }
+
+    .form-success {
+      display: none; background: rgba(20,118,255,0.06);
+      border: 1px solid rgba(20,118,255,0.2);
+      padding: 2rem; text-align: center;
+    }
+    .form-success.visible { display: block; animation: fadeIn 0.5s ease; }
+    .form-success h4 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-success p { font-size: 0.85rem; color: #64748b; margin-bottom: 1.2rem; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--line);
+      padding: 4rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 3rem; padding-bottom: 3rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+    }
+    .footer-brand {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+    }
+    .footer-brand img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem;
+    }
+    .footer-note { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-top: 0.9rem; max-width: 36ch; }
+    .footer-col-title {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+      margin-bottom: 1rem;
+    }
+    .footer-links a {
+      display: block; padding: 0.45rem 0;
+      font-size: 0.85rem; font-weight: 600;
+      color: rgba(255,255,255,0.65);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--blue); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.75rem; color: rgba(255,255,255,0.3);
+    }
+    .footer-bottom span { color: var(--blue); font-weight: 600; }
+
+    /* ── WHATSAPP FLOAT ── */
+    .wa-float {
+      position: fixed; bottom: 1.8rem; right: 1.8rem;
+      width: 54px; height: 54px; border-radius: 50%;
+      background: #25d366; z-index: 888;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+      transition: all 0.3s ease;
+    }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
+
+    /* ── MODALS ── */
+    .modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(8,14,26,0.97);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; cursor: zoom-out;
+    }
+    .modal.hidden { display: none; }
+    .modal-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      color: rgba(255,255,255,0.5); font-size: 2.5rem; font-weight: 200;
+      cursor: pointer; background: none; border: none;
+      transition: color 0.2s; line-height: 1;
+    }
+    .modal-close:hover { color: var(--blue); }
+    .modal img { max-width: 100%; max-height: 90vh; object-fit: contain; border: 1px solid rgba(20,118,255,0.15); }
+    .modal-hint { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .menu-btn { display: inline-flex; }
+      .hero-inner { grid-template-columns: 1fr; padding: 8rem 0 4rem; }
+      .hero-badges { display: none; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-right { grid-template-columns: 1fr 1fr; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; }
+    }
   </style>
 </head>
-
 <body>
 
-  <!-- NAV -->
-  <header class="nav">
+  <!-- ── NAV ── -->
+  <header id="mainNav">
     <div class="container">
       <div class="nav-row">
-        <a class="brand" href="#inicio" aria-label="Inicio">
-          <!-- Reemplaza el src con tu logo -->
+        <a class="brand" href="#inicio">
           <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" />
-          <span>LCS Builder &amp; Developer</span>
+          <div class="brand-name">
+            LCS Builder & Developer
+            <span>LLC — Puerto Rico</span>
+          </div>
         </a>
 
         <nav class="nav-links" aria-label="Navegación">
@@ -514,391 +744,510 @@
         </nav>
 
         <div class="nav-cta">
-          <a class="btn ghost" href="#contacto">Cotizar</a>
-          <a class="phone-pill" href="https://wa.me/17879756407"
-target="_blank"aria-label="Llamar">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z" fill="white"/>
-            </svg>
+          <a class="phone-btn" href="https://wa.me/17879756407" target="_blank">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
             787-975-6407
           </a>
-          <button class="menu-btn" type="button" onclick="toggleMobileMenu()">Menú</button>
+          <button class="menu-btn" onclick="toggleMenu()">Menú</button>
         </div>
       </div>
-
-      <!-- simple mobile dropdown -->
-      <div id="mobileMenu" style="display:none; padding:0 0 14px;">
-        <div style="display:flex; gap:12px; flex-wrap:wrap; color:rgba(255,255,255,.85); font-weight:800; text-transform:uppercase; letter-spacing:.12em; font-size:12px;">
-          <a href="#servicios" onclick="toggleMobileMenu()">Servicios</a>
-          <a href="#proyectos" onclick="toggleMobileMenu()">Proyectos</a>
-          <a href="#nosotros" onclick="toggleMobileMenu()">Sobre</a>
-          <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
-        </div>
+      <div id="mobileMenu">
+        <a href="#servicios" onclick="toggleMenu()">Servicios</a>
+        <a href="#proyectos" onclick="toggleMenu()">Proyectos</a>
+        <a href="#nosotros" onclick="toggleMenu()">Sobre</a>
+        <a href="#contacto" onclick="toggleMenu()">Contacto</a>
       </div>
-
     </div>
   </header>
 
-  <!-- HERO -->
+  <!-- ── HERO ── -->
   <section id="inicio" class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-stripe"></div>
+    <div class="hero-grid-lines"></div>
+
     <div class="container">
-      <div class="hero-grid">
+      <div class="hero-inner">
         <div>
-          <span class="chip">LCS Builder &amp; Developer LLC</span>
-          <h1>Tu lo imaginas, nosotros lo <span class="accent">Construimos</span></h1>
-          <p>
-            Construcción comercial, residencial entregada con precisión,
-            a tiempo y diseñada para durar por generaciones.
-          </p>
+          <div class="hero-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span>LCS Builder &amp; Developer LLC</span>
+          </div>
+          <h1>Tu lo imaginas,<br>nosotros lo <span class="accent">Construimos</span></h1>
+          <p class="hero-sub">Construcción comercial y residencial entregada con precisión, a tiempo y diseñada para durar por generaciones.</p>
           <div class="hero-actions">
-            <a class="btn primary" href="#contacto">Obtén una Cotización</a>
-            <a class="btn ghost" href="#proyectos">Ver Nuestro Trabajo</a>
+            <a class="btn-primary" href="#contacto">Obtén una Cotización →</a>
+            <a class="btn-ghost" href="#proyectos">Ver Nuestro Trabajo</a>
           </div>
         </div>
-        <div></div>
+
+        <div class="hero-badges">
+          <div class="hero-badge">
+            <div class="badge-icon">🏗️</div>
+            <div class="badge-text">
+              <strong>Construcción completa</strong>
+              <span>Desde cimentación hasta acabado final</span>
+            </div>
+          </div>
+          <div class="hero-badge">
+            <div class="badge-icon">📋</div>
+            <div class="badge-text">
+              <strong>Planos y permisos</strong>
+              <span>Gestión arquitectónica sin retrasos</span>
+            </div>
+          </div>
+          <div class="hero-badge">
+            <div class="badge-icon">✅</div>
+            <div class="badge-text">
+              <strong>Licenciado y asegurado</strong>
+              <span>Contratista certificado en Puerto Rico</span>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="servicios" class="section">
+  <!-- ── SERVICES ── -->
+  <section id="servicios" class="services-section">
     <div class="container">
-      <div class="kicker">Lo que hacemos</div>
-      <h2>Servicios de Construcción de<br/>Cobertura Completa</h2>
+      <div class="reveal">
+        <div class="section-kicker"><div class="kicker-line"></div><span>Lo que hacemos</span></div>
+        <h2 class="section-title">Servicios de Construcción<br><em>de Cobertura Completa</em></h2>
+      </div>
 
-      <div class="cards">
-        <article class="card">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            </svg>
+      <div class="services-grid">
+        <div class="service-card reveal delay-1">
+          <div class="service-num">01</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           </div>
           <h3>Construcción de Hogares</h3>
           <p>Casas a la medida — desde la cimentación hasta el acabado, con calidad en cada etapa.</p>
-        </article>
+        </div>
 
-        <article class="card" style="border-color:rgba(20,118,255,.35)">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3c2.6 3.2 4 5.8 4 8.1A4 4 0 0 1 8 11.1C8 8.8 9.4 6.2 12 3Z" stroke="currentColor" stroke-width="2" />
-              <path d="M6 14c1.8 1.8 4 2.7 6 2.7S16.2 15.8 18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M6.5 19.5c1.9 1 3.7 1.5 5.5 1.5s3.6-.5 5.5-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+        <div class="service-card reveal delay-2">
+          <div class="service-num">02</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3c2.6 3.2 4 5.8 4 8.1A4 4 0 0 1 8 11.1C8 8.8 9.4 6.2 12 3Z" stroke="currentColor" stroke-width="2"/><path d="M6 14c1.8 1.8 4 2.7 6 2.7S16.2 15.8 18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
           <h3>Piscinas</h3>
-          <p>Diseñamos y construimos la piscina que siempre has imaginado, adaptada a tu espacio, tu estilo y las necesidades de tu familia.</p>
-        </article>
+          <p>Diseñamos y construimos la piscina que siempre has imaginado, adaptada a tu espacio, estilo y familia.</p>
+        </div>
 
-        <article class="card">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M7 3h10v18H7V3Z" stroke="currentColor" stroke-width="2"/>
-              <path d="M9 7h6M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+        <div class="service-card reveal delay-3">
+          <div class="service-num">03</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 3h10v18H7V3Z" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
           <h3>Planos y Permisos</h3>
           <p>Planificación arquitectónica y manejo de permisos para que tu proyecto avance sin retrasos.</p>
-        </article>
+        </div>
 
-        <article class="card">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M4 12l4 4 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 18H5a1 1 0 0 1-1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+        <div class="service-card reveal delay-1">
+          <div class="service-num">04</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 12l4 4 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Servicios de Broker</h3>
-          <p>Corretaje inmobiliario para encontrar, evaluar y asegurar la propiedad ideal para tu proyecto.</article>
-<article class="card" style="border-color: rgba(20,118,255,.35);">
-  <div class="icon" aria-hidden="true">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path d="M7 3h10v18H7V3Z" stroke="currentColor" stroke-width="2"/>
-      <path d="M9 7h6M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <p>Corretaje inmobiliario para encontrar, evaluar y asegurar la propiedad ideal para tu proyecto.</p>
+        </div>
+
+        <div class="service-card reveal delay-2" style="border-left: 2px solid rgba(20,118,255,0.3);">
+          <div class="service-num">05</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 3h10v18H7V3Z" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Planos para Banco (203K)</h3>
+          <p>Escaneo digital + plano 2D profesional en PDF + cálculo de pies² y medidas por habitación. <strong>Entrega en 48h.</strong></p>
+          <p style="margin-top:0.5rem; font-size:0.78rem; color:#1476ff; font-weight:700;">Promo lanzamiento — primeros 10 hogares</p>
+        </div>
+
+        <div class="service-card reveal delay-3" style="border-left: 2px solid rgba(20,118,255,0.3);">
+          <div class="service-num">06</div>
+          <div class="service-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v12H4V7Z" stroke="currentColor" stroke-width="2"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Cotización 203K</h3>
+          <p>Presupuesto detallado por contratista licenciado, listo para presentar al banco. Ideal para FHA 203K y refinanciamientos.</p>
+          <ul>
+            <li>Desglose completo por partidas</li>
+            <li>Costos claros y organizados</li>
+            <li>Documento listo para banco</li>
+            <li>Entrega rápida</li>
+          </ul>
+          <div class="service-mini-cta">
+            <a class="btn-sm-primary" href="#contacto">Solicitar cotización</a>
+            <a class="btn-sm-ghost" href="tel:7879756407">Llamar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="proyectos" class="projects-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-kicker"><div class="kicker-line"></div><span>Nuestro portafolio</span></div>
+        <h2 class="section-title" style="color:#fff;">Proyectos <em>Destacados</em></h2>
+      </div>
+
+      <div class="projects-grid">
+        <div class="project-card reveal from-left" onclick="openModal('https://i.postimg.cc/TP7kr82n/Sunset.png')">
+          <img src="https://i.postimg.cc/TP7kr82n/Sunset.png" alt="Sunset Coast Loft" />
+          <div class="project-overlay"></div>
+          <div class="project-zoom">🔍</div>
+          <div class="project-info">
+            <div class="project-tag">Comercial</div>
+            <div class="project-title">Sunset Coast Loft & Rooftop</div>
+            <div class="project-desc">Apartamento disponible en Airbnb actualmente.</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal delay-1" onclick="openModal('https://i.postimg.cc/23R9V4jj/Casa-de-Josue.png')">
+          <img src="https://i.postimg.cc/23R9V4jj/Casa-de-Josue.png" alt="Residencia Moderna" />
+          <div class="project-overlay"></div>
+          <div class="project-zoom">🔍</div>
+          <div class="project-info">
+            <div class="project-tag">Residencial</div>
+            <div class="project-title">Residencia Moderna en PR</div>
+            <div class="project-desc">Construcción completa desde planos hasta entrega final.</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal from-right delay-2" onclick="openModal('https://i.postimg.cc/L69N06qz/3D.png')">
+          <img src="https://i.postimg.cc/L69N06qz/3D.png" alt="Render 3D" />
+          <div class="project-overlay"></div>
+          <div class="project-zoom">🔍</div>
+          <div class="project-info">
+            <div class="project-tag">Diseño Arquitectónico</div>
+            <div class="project-title">Render 3D – Residencia Moderna</div>
+            <div class="project-desc">Diseño contemporáneo con balcón panorámico y líneas minimalistas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="nosotros" class="about-section">
+    <div class="container">
+      <div class="about-inner">
+        <div class="reveal from-left">
+          <div class="section-kicker"><div class="kicker-line"></div><span>Sobre nosotros</span></div>
+          <h2 class="section-title" style="color:#fff;">Construcción seria,<br><em>resultados que se notan</em></h2>
+          <p class="about-desc">En LCS Builder & Developer trabajamos con planificación, control de calidad y comunicación constante. Nuestro enfoque es simple: entregar a tiempo, con detalles bien ejecutados y una experiencia profesional para el cliente. Si necesitas construcción, planos, permisos o apoyo para llevar tu idea de 0 a 100, aquí estamos.</p>
+          <div class="about-features">
+            <div class="about-feat">
+              <div class="feat-dot"></div>
+              <div><strong>Presupuesto claro</strong><span>Cotizaciones detalladas sin sorpresas al final del proyecto.</span></div>
+            </div>
+            <div class="about-feat">
+              <div class="feat-dot"></div>
+              <div><strong>Comunicación constante</strong><span>Reportes de progreso y acceso directo a nuestro equipo.</span></div>
+            </div>
+            <div class="about-feat">
+              <div class="feat-dot"></div>
+              <div><strong>Licenciado y asegurado</strong><span>Contratista general certificado en Puerto Rico.</span></div>
+            </div>
+            <div class="about-feat">
+              <div class="feat-dot"></div>
+              <div><strong>Entrega a tiempo</strong><span>Cronogramas realistas que cumplimos al pie de la letra.</span></div>
+            </div>
+          </div>
+          <div style="margin-top: 2rem;">
+            <a class="btn-primary" href="#contacto">Hablemos de tu proyecto →</a>
+          </div>
+        </div>
+
+        <div class="about-right reveal from-right">
+          <div class="about-stat">
+            <div class="big" data-count="20" data-suffix="+">0</div>
+            <div class="lbl">Años de Experiencia</div>
+          </div>
+          <div class="about-stat">
+            <div class="big" data-count="30" data-suffix="+">0</div>
+            <div class="lbl">Proyectos</div>
+          </div>
+          <div class="about-stat">
+            <div class="big" data-count="98" data-suffix="%">0</div>
+            <div class="lbl">Satisfacción</div>
+          </div>
+          <div class="about-stat">
+            <div class="big">48h</div>
+            <div class="lbl">Entrega Planos 203K</div>
+          </div>
+          <div class="about-quote">
+            <p>"Si necesitas construcción, planos o permisos, llevamos tu idea de 0 a 100 con profesionalismo y transparencia."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contacto" class="contact-section">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="reveal from-left">
+          <div class="section-kicker"><div class="kicker-line"></div><span>Contáctanos</span></div>
+          <h2 class="section-title">¿Listo para comenzar<br><em>tu proyecto?</em></h2>
+          <p style="font-size:0.9rem; color:#64748b; line-height:1.7; margin-top:1rem; max-width:40ch;">Cuéntanos sobre tu idea y te contactamos en menos de 24 horas con información y próximos pasos.</p>
+
+          <div class="contact-info">
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="info-text">
+                <strong>Teléfono / WhatsApp</strong>
+                <span><a href="tel:7879756407">787-975-6407</a> / <a href="tel:7876031323">787-603-1323</a></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="info-text">
+                <strong>Email</strong>
+                <span><a href="mailto:lcsbuilder@gmail.com">lcsbuilder@gmail.com</a></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="info-text">
+                <strong>Horario</strong>
+                <span>Lun–Vie: 7:00 AM – 6:00 PM · Sáb: Por cita</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2"/><path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="info-text">
+                <strong>Ubicación</strong>
+                <span>Puerto Rico (por cita)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal from-right">
+          <div class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nombre *</label>
+                <input type="text" class="form-input" id="fNombre" placeholder="Nombre y apellido" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teléfono</label>
+                <input type="tel" class="form-input" id="fTelefono" placeholder="787-000-0000" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Correo electrónico *</label>
+              <input type="email" class="form-input" id="fEmail" placeholder="tucorreo@email.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tipo de proyecto *</label>
+              <select class="form-input form-select" id="fServicio" required>
+                <option value="" disabled selected>Selecciona un servicio</option>
+                <option>Construcción de hogar</option>
+                <option>Piscinas</option>
+                <option>Planos y permisos</option>
+                <option>Planos para Banco (203K)</option>
+                <option>Cotización 203K</option>
+                <option>Servicios de Broker</option>
+                <option>Consulta general</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cuéntanos sobre tu proyecto *</label>
+              <textarea class="form-input form-textarea" id="fMensaje" placeholder="Ubicación, tipo de proyecto, tamaño aproximado, timeline, presupuesto..." required></textarea>
+            </div>
+            <button type="button" class="form-submit" id="formBtn" onclick="submitForm()">
+              Enviar Mensaje →
+            </button>
+          </div>
+
+          <div class="form-success" id="formSuccess">
+            <div style="font-size:2.5rem; margin-bottom:0.8rem;">✅</div>
+            <h4>¡Mensaje enviado!</h4>
+            <p>Nos pondremos en contacto contigo muy pronto. También puedes escribirnos directamente por WhatsApp.</p>
+            <a href="https://wa.me/17879756407" target="_blank" class="btn-primary" style="display:inline-flex; margin-top:1rem;">
+              Continuar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" />
+            <div>
+              <div class="footer-brand-name">LCS Builder & Developer LLC</div>
+            </div>
+          </div>
+          <p class="footer-note">Contratista general en Puerto Rico. Comprometidos con calidad, seguridad y entregas a tiempo.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Enlaces rápidos</div>
+          <div class="footer-links">
+            <a href="#servicios">Servicios</a>
+            <a href="#proyectos">Proyectos</a>
+            <a href="#nosotros">Sobre</a>
+            <a href="#contacto">Contacto</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Certificaciones</div>
+          <div class="footer-links">
+            <a href="#">Licencia de Corredor de Bienes Raíces</a>
+            <a href="#">Licencia de Contratista</a>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a class="phone-btn" href="https://wa.me/17879756407" target="_blank" style="display:inline-flex;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> LCS Builder & Developer LLC. Todos los derechos reservados.</span>
+        <span>Hecho con ❤️ en <span>Puerto Rico</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── WHATSAPP FLOAT ── -->
+  <a href="https://wa.me/17879756407" class="wa-float" target="_blank" aria-label="WhatsApp">
+    <svg width="26" height="26" fill="#fff" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.897-5.335 11.9-11.894a11.83 11.83 0 00-3.486-8.422z"/>
     </svg>
-  </div>
-  <h3>Planos para Banco (203K)</h3>
-  <p>
-    Escaneo digital + plano 2D profesional en PDF + cálculo de pies² y medidas por habitación.
-    <strong>Entrega en 48 horas</strong>. Promo de lanzamiento para los <strong>primeros 10 hogares</strong>.
-  </p>
-</article>
-  <article class="card" style="border-color: rgba(20,118,255,.35);">
-  <div class="icon" aria-hidden="true">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path d="M4 7h16v12H4V7Z" stroke="currentColor" stroke-width="2"/>
-      <path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
+  </a>
+
+  <!-- ── MODAL ── -->
+  <div id="photoModal" class="modal hidden" onclick="closeModal()">
+    <button class="modal-close">&times;</button>
+    <img id="modalImg" src="" alt="">
+    <p class="modal-hint">Presiona en cualquier lugar para cerrar</p>
   </div>
 
-  <h3>Cotización para Préstamos 203K</h3>
-  <p>
-    Presupuesto detallado por contratista licenciado, listo para presentar al banco.
-    Ideal para préstamos FHA 203K y refinanciamientos.
-  </p>
+  <script>
+    /* ── Year ── */
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  <ul>
-    <li>Desglose completo por partidas</li>
-    <li>Costos claros y organizados</li>
-    <li>Documento listo para banco</li>
-    <li>Entrega rápida</li>
-  </ul>
+    /* ── Nav scroll ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+    });
 
-  <div class="mini-cta">
-    <a class="btn primary small" href="#contacto">Solicitar cotización</a>
-    <a class="btn soft small" href="tel:7879756407">Llamar</a>
-  </div>
-</article>
-</p>
-        </article>
-      </div>
-    </div>
-  </section>
+    /* ── Mobile menu ── */
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
 
-  <!-- STATS -->
-  <section class="stats" aria-label="Métricas">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat">
-          <div class="num">20+</div>
-          <div class="lbl">Años de experiencia</div>
-        </div>
-        <div class="stat">
-          <div class="num">30+</div>
-          <div class="lbl">Proyectos completados</div>
-        </div>
-        <div class="stat">
-          <div class="num">98%</div>
-          <div class="lbl">Satisfacción del cliente</div>
-        </div>
-        
-      </div>
-    </div>
-  </section>
+    /* ── Scroll reveal ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-  <!-- PROJECTS -->
-  <section id="proyectos" class="section alt">
-    <div class="container">
-      <div class="kicker">Nuestro portafolio</div>
-      <h2>Proyectos Destacados</h2>
+    /* ── Animated counters ── */
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1800;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !e.target.dataset.animated) {
+          e.target.dataset.animated = 'true';
+          animateCounter(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
 
-      <div class="projects">
-        <article class="project">
-          <div class="thumb">
-            <img src="https://i.postimg.cc/TP7kr82n/Sunset.png" alt="Proyecto comercial" />
-          </div>
-          <div class="proj-body">
-            <div class="tag">Comercial</div>
-            <h3>Sunset Coast Loft & Rooftop</h3>
-            <p>Apartamento disponible en Airbnb actualmente.</p>
-          </div>
-        </article>
+    /* ── Contact form ── */
+    function submitForm() {
+      const nombre = document.getElementById('fNombre').value.trim();
+      const email = document.getElementById('fEmail').value.trim();
+      const servicio = document.getElementById('fServicio').value;
+      const mensaje = document.getElementById('fMensaje').value.trim();
+      const telefono = document.getElementById('fTelefono').value.trim();
 
-        <article class="project">
-  <div class="thumb">
-    <img src="https://i.postimg.cc/23R9V4jj/Casa-de-Josue.png" />
-  </div>
-  <div class="proj-body">
-    <div class="tag">Residencial</div>
-    <h3>Residencia Moderna en PR</h3>
-    <p>
-      Construcción residencial personalizada con diseño moderno,
-      distribución funcional y acabados de alta calidad.
-      Proyecto completo desde planos hasta entrega final.
-    </p>
-  </div>
-</article>
+      const required = [
+        { id: 'fNombre', val: nombre },
+        { id: 'fEmail', val: email },
+        { id: 'fServicio', val: servicio },
+        { id: 'fMensaje', val: mensaje },
+      ];
 
-        <article class="project">
-  <div class="thumb">
-    <img src="https://i.postimg.cc/L69N06qz/3D.png" alt="Render 3D de residencia moderna en Puerto Rico" />
-  </div>
-  <div class="proj-body">
-    <div class="tag">Diseño Arquitectónico</div>
-    <h3>Render 3D – Residencia Moderna</h3>
-    <p>
-      Visualización arquitectónica en 3D desarrollada para cliente residencial.
-      Diseño contemporáneo con balcón panorámico, líneas minimalistas
-      y planificación estructural lista para construcción.
-    </p>
-  </div>
-</article>
-      </div>
-    </div>
-  </section>
+      let valid = true;
+      required.forEach(({ id, val }) => {
+        const el = document.getElementById(id);
+        if (!val) {
+          valid = false;
+          el.style.borderColor = '#ef4444';
+          el.style.animation = 'shake 0.4s ease';
+          setTimeout(() => { el.style.animation = ''; el.style.borderColor = ''; }, 700);
+        }
+      });
+      if (!valid) return;
 
-  <!-- ABOUT -->
-  <section id="nosotros" class="section">
-    <div class="container">
-      <div class="kicker">Sobre nosotros</div>
-      <h2>Construcción seria, procesos claros,<br/>resultados que se notan.</h2>
-      <p style="max-width:78ch; color:var(--muted); line-height:1.75; margin:0;">
-        En LCS Builder &amp; Developer trabajamos con planificación, control de calidad y comunicación constante.
-        Nuestro enfoque es simple: entregar a tiempo, con detalles bien ejecutados y una experiencia profesional para el cliente.
-        Si necesitas construcción, planos, permisos o apoyo para llevar tu idea de 0 a 100, aquí estamos.
-      </p>
-    </div>
-  </section>
+      const btn = document.getElementById('formBtn');
+      btn.textContent = 'Enviando...';
+      btn.classList.add('loading');
 
-  <!-- CONTACT -->
-  <section id="contacto" class="section alt">
-    <div class="container">
-      <div class="kicker">Contáctanos</div>
-      <h2>¿Listo para Comenzar tu Proyecto?</h2>
+      const text = `Hola, soy *${nombre}*.\n📧 Email: ${email}\n📞 Tel: ${telefono || 'No indicado'}\n🔧 Servicio: *${servicio}*\n\n${mensaje}`;
+      const url = `https://wa.me/17879756407?text=${encodeURIComponent(text)}`;
 
-      <div class="contact-grid">
-     <form onsubmit="sendWhatsApp(event)">
-          <div class="fields">
-            <div class="field">
-              <label for="nombre">Tu nombre</label>
-              <input id="nombre" name="nombre" placeholder="Nombre y apellido" required />
-            </div>
-            <div class="field">
-              <label for="email">Correo electrónico</label>
-              <input id="email" name="email" type="email" placeholder="tucorreo@email.com" required />
-            </div>
-          </div>
+      setTimeout(() => {
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('visible');
+        window.open(url, '_blank');
+      }, 900);
+    }
 
-          <div class="field" style="margin-top:14px;">
-            <label for="telefono">Número de teléfono</label>
-            <input id="telefono" name="telefono" placeholder="787-000-0000" />
-          </div>
-
-          <div class="field" style="margin-top:14px;">
-            <label for="mensaje">Cuéntanos sobre tu proyecto</label>
-            <textarea id="mensaje" name="mensaje" placeholder="Ubicación, tipo de proyecto, tamaño aproximado, timeline, presupuesto (si aplica)..." required></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn primary" type="submit">Enviar Mensaje</button>
-          </div>
-        </form>
-
-        <aside class="contact-card" aria-label="Información de contacto">
-          <div class="contact-item">
-            <div class="mini" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="2"/>
-              </svg>
-            </div>
-            <div>
-              <h4>Dirección</h4>
-              <p>Puerto Rico (por cita)</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="mini" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z" stroke="currentColor" stroke-width="2" />
-              </svg>
-            </div>
-            <div>
-              <h4>Teléfono</h4>
-              <p><a href="tel:7879756407">787-975-6407</a> / <a href="tel:7876031323">787-603-1323</a><br/>Lun–Vie, 7am–6pm</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="mini" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2"/>
-                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div>
-              <h4>Email</h4>
-              <p><a href="mailto:lcsbuilder@gmail.com">lcsbuilder@gmail.com</a><br/>Respondemos en 24h</p>
-            </div>
-          </div>
-
-          <div class="contact-item">
-            <div class="mini" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
-              </svg>
-            </div>
-            <div>
-              <h4>Horario</h4>
-              <p>Lun–Vie: 7:00 AM – 6:00 PM<br/>Sáb: Por cita</p>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </section>
-
- <footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-
-      <div class="footer-col">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-          <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" style="height:120px;width:auto;" />
-          <div style="font-weight:900; font-size:16px;">LCS Builder & Developer LLC</div>
-        </div>
-        <div class="footer-note">
-          Contratista general. Comprometidos con calidad, seguridad y entregas a tiempo.
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-title">Enlaces rápidos</div>
-        <div class="footer-links">
-          <a href="#servicios">Servicios</a>
-          <a href="#proyectos">Proyectos</a>
-          <a href="#nosotros">Sobre</a>
-          <a href="#contacto">Contacto</a>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-title">Certificaciones</div>
-        <div class="footer-links">
-          <a href="#" onclick="return false;">Licencia de Corredor de Bienes Raices</a>
-          <a href="#" onclick="return false;">Licencia de Contratista</a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      © <span id="year"></span> LCS Builder & Developer LLC. Todos los derechos reservados.
-    </div>
-  </div>
-</footer>
-
- <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  function toggleMobileMenu(){
-    const el = document.getElementById("mobileMenu");
-    el.style.display = (el.style.display === "none" || !el.style.display) ? "block" : "none";
-  }
-
-  function sendWhatsApp(e){
-    e.preventDefault();
-
-    const name = document.getElementById("nombre").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("telefono").value.trim();
-    const msg = document.getElementById("mensaje").value.trim();
-
-    const waNumber = "17879756407"; // your WhatsApp number with +1
-
-    const text =
-      `Hola, soy ${name}.%0A%0A` +
-      `Email: ${email}%0A` +
-      `Teléfono: ${phone}%0A%0A` +
-      `Mensaje:%0A${msg}`;
-
-    window.open(`https://wa.me/${waNumber}?text=${text}`, "_blank");
-  }
-</script>
+    /* ── Photo modal ── */
+    function openModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('photoModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('photoModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
 </body>
-</html>
-    
-  </body>
-  
 </html>
