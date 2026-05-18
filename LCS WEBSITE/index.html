@@ -113,30 +113,69 @@
     .phone-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 12px 30px var(--blue-glow); }
     .phone-btn svg { width: 16px; height: 16px; }
 
-    .menu-btn {
-      display: none; padding: 0.55rem 1rem; border-radius: 8px;
-      background: rgba(255,255,255,0.07); border: 1px solid var(--line);
-      color: #fff; font-size: 0.8rem; font-weight: 700; cursor: pointer;
-      transition: background 0.2s;
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px; background: none; border: none;
+      z-index: 10001; position: relative;
     }
-    .menu-btn:hover { background: rgba(255,255,255,0.12); }
+    .hamburger span {
+      display: block; width: 26px; height: 1.5px; background: #fff;
+      transition: all 0.38s cubic-bezier(0.4,0,0.2,1); transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-    #mobileMenu {
-      display: none;
-      padding: 0.5rem 0 1rem;
-      border-top: 1px solid var(--line);
-      margin-top: 0.5rem;
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--navy);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1);
     }
-    #mobileMenu.open { display: block; }
-    #mobileMenu a {
-      display: block; padding: 0.6rem 0;
-      font-size: 0.85rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(255,255,255,0.8);
-      border-bottom: 1px solid var(--line);
-      transition: color 0.2s;
+    .mobile-overlay.open { opacity: 1; pointer-events: all; }
+    .mob-link {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 8vw, 3.5rem); font-weight: 400;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      letter-spacing: 0.04em; padding: 0.55rem 0;
+      position: relative;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease, color 0.3s ease;
     }
-    #mobileMenu a:hover { color: var(--blue); }
+    .mobile-overlay.open .mob-link { opacity: 1; transform: translateY(0); }
+    .mobile-overlay.open .mob-link:nth-child(1) { transition-delay: 0.08s; }
+    .mobile-overlay.open .mob-link:nth-child(2) { transition-delay: 0.16s; }
+    .mobile-overlay.open .mob-link:nth-child(3) { transition-delay: 0.24s; }
+    .mobile-overlay.open .mob-link:nth-child(4) { transition-delay: 0.32s; }
+    .mob-link::after {
+      content: ''; position: absolute; bottom: 2px; left: 50%;
+      width: 0; height: 1px; background: var(--blue);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    .mob-link:hover { color: var(--blue); }
+    .mob-link:hover::after { width: 100%; left: 0; }
+    .mob-divider { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 1.2rem 0; opacity: 0; transition: opacity 0.4s ease 0.32s; }
+    .mobile-overlay.open .mob-divider { opacity: 1; }
+    .mob-cta {
+      font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      background: var(--blue); color: #fff; padding: 0.85rem 2rem;
+      border: 1px solid var(--blue); text-decoration: none;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.4s ease 0.38s, transform 0.4s ease 0.38s, background 0.3s;
+    }
+    .mobile-overlay.open .mob-cta { opacity: 1; transform: translateY(0); }
+    .mob-cta:hover { background: var(--blue-dark); }
+    .mob-phone {
+      margin-top: 1.2rem; font-size: 0.82rem; color: rgba(255,255,255,0.3);
+      opacity: 0; transition: opacity 0.4s ease 0.44s;
+    }
+    .mobile-overlay.open .mob-phone { opacity: 1; }
+    .mob-phone a { color: var(--blue); text-decoration: none; }
 
     /* ── HERO ── */
     .hero {
@@ -701,9 +740,10 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 980px) {
       .nav-links { display: none; }
-      .menu-btn { display: inline-flex; }
+      .hamburger { display: flex !important; }
+      .phone-btn { display: none; }
       .hero-inner { grid-template-columns: 1fr; padding: 8rem 0 4rem; }
-      .hero-badges { display: none; }
+      .hero-badges { flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
       .services-grid { grid-template-columns: 1fr 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .projects-grid { grid-template-columns: 1fr 1fr; }
@@ -719,7 +759,18 @@
       .form-row { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; gap: 0.5rem; }
-    }/* ── iPHONE / MOBILE POLISH ── */
+      .hero-badge { padding: 0.8rem 1rem; }
+    }    /* ── RIPPLE ── */
+    .ripple-btn { position: relative; overflow: hidden; }
+    .ripple-btn .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transform: scale(0); animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* ── iPHONE / MOBILE POLISH ── */
 @media (max-width: 480px) {
   .container {
     width: calc(100% - 1.5rem);
@@ -870,17 +921,24 @@
             <svg viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
             787-975-6407
           </a>
-          <button class="menu-btn" onclick="toggleMenu()">Menú</button>
+          <button class="hamburger" id="hamburgerBtn" aria-label="Menú" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+          </button>
         </div>
-      </div>
-      <div id="mobileMenu">
-        <a href="#servicios" onclick="toggleMenu()">Servicios</a>
-        <a href="#proyectos" onclick="toggleMenu()">Proyectos</a>
-        <a href="#nosotros" onclick="toggleMenu()">Sobre</a>
-        <a href="#contacto" onclick="toggleMenu()">Contacto</a>
       </div>
     </div>
   </header>
+
+  <!-- ── MOBILE OVERLAY ── -->
+  <div class="mobile-overlay" id="mobileOverlay">
+    <a class="mob-link" href="#servicios" onclick="toggleMenu()">Servicios</a>
+    <a class="mob-link" href="#proyectos" onclick="toggleMenu()">Proyectos</a>
+    <a class="mob-link" href="#nosotros" onclick="toggleMenu()">Sobre Nosotros</a>
+    <a class="mob-link" href="#contacto" onclick="toggleMenu()">Contacto</a>
+    <div class="mob-divider"></div>
+    <a class="mob-cta" href="#contacto" onclick="toggleMenu()">Obtén una Cotización →</a>
+    <div class="mob-phone"><a href="tel:7879756407">787-975-6407</a></div>
+  </div>
 
   <!-- ── HERO ── -->
   <section id="inicio" class="hero">
@@ -981,14 +1039,18 @@
           <p>Corretaje inmobiliario para encontrar, evaluar y asegurar la propiedad ideal para tu proyecto.</p>
         </div>
 
-        <div class="service-card reveal delay-2" style="border-left: 2px solid rgba(20,118,255,0.3);">
+        <div class="service-card reveal delay-2">
           <div class="service-num">05</div>
           <div class="service-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 3h10v18H7V3Z" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3L2 8l10 5 10-5-10-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 16l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3>Planos para Banco (203K)</h3>
-          <p>Escaneo digital + plano 2D profesional en PDF + cálculo de pies² y medidas por habitación. <strong>Entrega en 48h.</strong></p>
-          <p style="margin-top:0.5rem; font-size:0.78rem; color:#1476ff; font-weight:700;">Promo lanzamiento — primeros 10 hogares</p>
+          <h3>Renderizados 3D</h3>
+          <p>Visualiza tu proyecto antes de construir. Renderizados arquitectónicos fotorrealistas para presentaciones, clientes y toma de decisiones.</p>
+          <ul>
+            <li>Exteriores e interiores fotorrealistas</li>
+            <li>Vistas 360° y recorridos virtuales</li>
+            <li>Ideal para ventas y permisos</li>
+          </ul>
         </div>
 
         <div class="service-card reveal delay-3" style="border-left: 2px solid rgba(20,118,255,0.3);">
@@ -1285,7 +1347,11 @@
 
     /* ── Mobile menu ── */
     function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
+      const overlay = document.getElementById('mobileOverlay');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = overlay.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     /* ── Scroll reveal ── */
@@ -1369,7 +1435,57 @@
       document.getElementById('photoModal').classList.add('hidden');
       document.body.style.overflow = '';
     }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeModal(); if (document.getElementById('mobileOverlay').classList.contains('open')) toggleMenu(); }
+    });
+
+    /* ── Ripple effect ── */
+    document.querySelectorAll('.btn-primary, .btn-ghost, .phone-btn, .form-submit, .btn-sm-primary').forEach(btn => {
+      btn.classList.add('ripple-btn');
+      btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 2;
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 650);
+      });
+    });
+
+    /* ── Hero parallax ── */
+    const heroBg = document.querySelector('.hero-bg');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < window.innerHeight) {
+        heroBg.style.transform = `scale(1.06) translateY(${window.scrollY * 0.15}px)`;
+      }
+    }, { passive: true });
+
+    /* ── Magnetic buttons ── */
+    document.querySelectorAll('.btn-primary, .phone-btn').forEach(btn => {
+      btn.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+        const y = (e.clientY - rect.top - rect.height / 2) * 0.15;
+        this.style.transform = `translate(${x}px, ${y}px) translateY(-2px)`;
+      });
+      btn.addEventListener('mouseleave', function() { this.style.transform = ''; });
+    });
+
+    /* ── Card tilt ── */
+    document.querySelectorAll('.service-card, .hero-badge').forEach(card => {
+      card.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        this.style.transform = `perspective(700px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-5px)`;
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+        this.style.transition = 'transform 0.5s ease';
+        setTimeout(() => this.style.transition = '', 500);
+      });
+    });
   </script>
 </body>
 </html>
