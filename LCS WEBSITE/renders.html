@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Renderizados 3D — LCS Builder & Developer</title>
+  <meta name="description" content="Galería de renderizados 3D fotorrealistas y recorridos en video de LCS Builder & Developer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #1476ff;
+      --blue-dark: #0b5fe0;
+      --blue-glow: rgba(20,118,255,0.22);
+      --navy: #080e1a;
+      --navy2: #0d1525;
+      --navy3: #111e35;
+      --navy4: #162440;
+      --steel: #1c2d47;
+      --text: #f0f4ff;
+      --muted: rgba(200,215,240,0.55);
+      --line: rgba(255,255,255,0.07);
+      --gold: #f0a500;
+      --max: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { width: min(var(--max), calc(100% - 3rem)); margin: 0 auto; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .delay-1 { transition-delay: .1s; }
+    .delay-2 { transition-delay: .2s; }
+    .delay-3 { transition-delay: .3s; }
+
+    /* ── NAV ── */
+    #mainNav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
+      padding: 1.2rem 0;
+      transition: all 0.4s ease;
+    }
+    #mainNav.scrolled {
+      background: rgba(8,14,26,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      padding: 0.7rem 0;
+    }
+    .nav-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .brand img {
+      width: 56px; height: 56px; object-fit: contain; border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+    .brand:hover img { transform: scale(1.06); }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .brand-name span { display: block; font-size: 0.65rem; font-family: 'Outfit', sans-serif; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); margin-top: 2px; }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2.2rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    .nav-links a { position: relative; transition: color 0.3s; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--blue);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: #fff; }
+    .nav-links a.active::after { width: 100%; }
+
+    .nav-cta { display: flex; align-items: center; gap: 0.75rem; }
+    .phone-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue); color: #fff;
+      padding: 0.6rem 1.1rem; border-radius: 10px;
+      font-size: 0.82rem; font-weight: 700;
+      box-shadow: 0 8px 24px var(--blue-glow);
+      transition: all 0.3s ease;
+    }
+    .phone-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 12px 30px var(--blue-glow); }
+    .phone-btn svg { width: 16px; height: 16px; }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      align-items: center; justify-content: center;
+      min-width: 44px; min-height: 44px; /* área táctil mínima recomendada */
+      cursor: pointer; padding: 6px; background: none; border: none;
+      z-index: 10001; position: relative;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 1.5px; background: #fff;
+      transition: all 0.38s cubic-bezier(0.4,0,0.2,1); transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--navy);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-overlay.open { opacity: 1; pointer-events: all; }
+    .mob-link {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 8vw, 3.5rem); font-weight: 400;
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      letter-spacing: 0.04em; padding: 0.55rem 0;
+      position: relative;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease, color 0.3s ease;
+    }
+    .mobile-overlay.open .mob-link { opacity: 1; transform: translateY(0); }
+    .mobile-overlay.open .mob-link:nth-child(1) { transition-delay: 0.08s; }
+    .mobile-overlay.open .mob-link:nth-child(2) { transition-delay: 0.16s; }
+    .mobile-overlay.open .mob-link:nth-child(3) { transition-delay: 0.24s; }
+    .mobile-overlay.open .mob-link:nth-child(4) { transition-delay: 0.32s; }
+    .mobile-overlay.open .mob-link:nth-child(5) { transition-delay: 0.40s; }
+    .mob-link::after {
+      content: ''; position: absolute; bottom: 2px; left: 50%;
+      width: 0; height: 1px; background: var(--blue);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    .mob-link:hover { color: var(--blue); }
+    .mob-link:hover::after { width: 100%; left: 0; }
+    .mob-divider { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 1.2rem 0; opacity: 0; transition: opacity 0.4s ease 0.32s; }
+    .mobile-overlay.open .mob-divider { opacity: 1; }
+    .mob-cta {
+      font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      background: var(--blue); color: #fff; padding: 0.85rem 2rem;
+      border: 1px solid var(--blue); text-decoration: none;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.4s ease 0.38s, transform 0.4s ease 0.38s, background 0.3s;
+    }
+    .mobile-overlay.open .mob-cta { opacity: 1; transform: translateY(0); }
+    .mob-cta:hover { background: var(--blue-dark); }
+    .mob-phone {
+      margin-top: 1.2rem; font-size: 0.82rem; color: rgba(255,255,255,0.3);
+      opacity: 0; transition: opacity 0.4s ease 0.44s;
+    }
+    .mobile-overlay.open .mob-phone { opacity: 1; }
+    .mob-phone a { color: var(--blue); text-decoration: none; }
+
+    /* ── LANGUAGE TOGGLE ── */
+    .lang-toggle {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px; padding: 0.55rem 0.85rem;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.3s ease;
+    }
+    .lang-toggle:hover {
+      border-color: rgba(20,118,255,0.5);
+      background: rgba(20,118,255,0.1);
+      transform: translateY(-1px);
+    }
+    .lang-toggle .lang-opt { transition: color 0.3s ease; }
+    .lang-toggle .lang-opt.active { color: var(--blue); }
+    .lang-toggle .lang-sep { color: rgba(255,255,255,0.18); font-weight: 400; }
+    .mob-lang {
+      margin-top: 1.4rem;
+      opacity: 0; transition: opacity 0.4s ease 0.5s;
+    }
+    .mobile-overlay.open .mob-lang { opacity: 1; }
+    .mob-lang .lang-toggle { font-size: 0.85rem; padding: 0.7rem 1.2rem; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue); color: #fff;
+      padding: 0.85rem 1.8rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      box-shadow: 0 14px 32px var(--blue-glow);
+      transition: all 0.35s ease;
+      position: relative; overflow: hidden; border: none; cursor: pointer;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left 0.45s ease;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 18px 40px var(--blue-glow); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: rgba(255,255,255,0.85);
+      padding: 0.85rem 1.8rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: #fff; transform: translateY(-1px); }
+
+    /* ── SECTION KICKER / TITLE ── */
+    .section-kicker {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem;
+    }
+    .kicker-line { width: 28px; height: 2px; background: var(--blue); }
+    .reveal .kicker-line { transform: scaleX(0); transform-origin: left; transition: transform 0.8s cubic-bezier(.4,0,.2,1) 0.25s; }
+    .reveal.visible .kicker-line { transform: scaleX(1); }
+    .section-kicker span {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 700; line-height: 1.1;
+      color: var(--navy); letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--blue); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      position: relative; overflow: hidden;
+      padding: 9rem 0 4rem;
+      background: var(--navy);
+    }
+    .page-header-orb {
+      position: absolute; top: -10%; right: -5%;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: rgba(20,118,255,0.14); filter: blur(100px);
+      pointer-events: none;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+      margin-bottom: 1.6rem; transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--blue); }
+    .page-header .section-title { color: #fff; }
+    .page-header-intro { max-width: 620px; color: var(--muted); font-size: 1rem; line-height: 1.7; margin-top: 1rem; }
+
+    /* ── RENDERS GALLERY ── */
+    .renders-main { background: var(--navy); padding: 1rem 0 6rem; position: relative; }
+
+    .render-sub-kicker {
+      display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .render-sub-title {
+      font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+      color: #fff; margin-bottom: 1.6rem;
+    }
+
+    .render-block { margin-top: 3.5rem; }
+    .render-block:first-child { margin-top: 2.5rem; }
+
+    /* Photos grid */
+    .render-photos-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.2rem;
+    }
+    .render-hero-card {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 16/10; border-radius: 12px;
+      border: 1px solid var(--line); background: var(--navy3);
+    }
+    .render-hero-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.25,1,0.5,1); }
+    .render-hero-card:hover img { transform: scale(1.08); }
+    .render-hero-card .render-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,14,26,0.94) 0%, rgba(8,14,26,0.15) 55%, transparent 100%);
+      transition: background 0.4s ease;
+    }
+    .render-hero-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 1.1rem; }
+    .render-hero-tag {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 0.25rem;
+    }
+    .render-hero-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.25; }
+    .render-zoom {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.9rem;
+      opacity: 0; transform: scale(0.8);
+      transition: all 0.3s ease;
+    }
+    .render-hero-card:hover .render-zoom { opacity: 1; transform: scale(1); }
+
+    /* Video tiles — uniform grid, click to play fullscreen */
+    .render-videos-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.2rem;
+    }
+    /* Tope de 3 columnas en escritorio: en pantallas anchas auto-fit metía 4
+       columnas y las miniaturas quedaban muy pequeñas para lucir los renders */
+    @media (min-width: 981px) {
+      .render-photos-grid, .render-videos-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .video-tile {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 16/10; border-radius: 12px;
+      border: 1px solid var(--line); background: var(--navy3);
+    }
+    .video-tile img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.25,1,0.5,1);
+    }
+    .video-tile:hover img { transform: scale(1.07); }
+    .video-tile-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,14,26,0.94) 0%, rgba(8,14,26,0.15) 55%, transparent 100%);
+      transition: background 0.4s ease;
+    }
+    .video-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(20,118,255,0.9);
+      box-shadow: 0 8px 28px var(--blue-glow);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.35s ease;
+    }
+    .video-play svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
+    .video-tile:hover .video-play { transform: translate(-50%, -50%) scale(1.14); background: var(--blue); }
+    .video-tile-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 1.1rem; }
+    .video-tile-tag {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 0.25rem;
+    }
+    .video-tile-title {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      font-weight: 700; color: #fff; line-height: 1.25;
+    }
+
+    /* Video modal (fullscreen player) */
+    .video-modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(8,14,26,0.97);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .video-modal.hidden { display: none; }
+    .video-modal-inner { width: min(1100px, 100%); }
+    .video-modal video {
+      width: 100%; max-height: 80vh; display: block;
+      background: #000; border-radius: 8px;
+      border: 1px solid rgba(20,118,255,0.15);
+    }
+    .video-modal-title {
+      text-align: center; margin-top: 1rem;
+      font-family: 'Playfair Display', serif; font-size: 1.05rem; color: #fff;
+    }
+    .video-soon {
+      padding: 3.5rem 2rem; text-align: center;
+      border: 1px solid rgba(20,118,255,0.22); border-radius: 10px;
+      background: rgba(20,118,255,0.05);
+    }
+    .video-soon p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.4rem; }
+
+    .renders-cta { margin-top: 3.5rem; text-align: center; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--line);
+      padding: 4rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 3rem; padding-bottom: 3rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+    }
+    .footer-brand { display: flex; align-items: flex-start; gap: 0.9rem; }
+    .footer-brand img { width: 56px; height: 56px; object-fit: contain; border-radius: 8px; }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem;
+    }
+    .footer-note { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-top: 0.9rem; max-width: 36ch; }
+    .footer-col-title {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+      margin-bottom: 1rem;
+    }
+    .footer-links a {
+      display: block; padding: 0.45rem 0;
+      font-size: 0.85rem; font-weight: 600;
+      color: rgba(255,255,255,0.65);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--blue); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.75rem; color: rgba(255,255,255,0.3);
+    }
+    .footer-bottom span { color: var(--blue); font-weight: 600; }
+
+    /* ── WHATSAPP FLOAT ── */
+    .wa-float {
+      position: fixed; bottom: 1.8rem; right: 1.8rem;
+      width: 54px; height: 54px; border-radius: 50%;
+      background: #25d366; z-index: 888;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+      transition: all 0.3s ease;
+    }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
+
+    /* ── BACK TO TOP ── */
+    .back-top {
+      position: fixed; bottom: 1.8rem; left: 1.8rem; z-index: 888;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(13,21,37,0.9); backdrop-filter: blur(8px);
+      border: 1px solid rgba(20,118,255,0.35);
+      color: var(--blue); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0; transform: translateY(14px); pointer-events: none;
+      transition: all 0.35s ease;
+    }
+    .back-top.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .back-top:hover { background: var(--blue); color: #fff; box-shadow: 0 8px 24px var(--blue-glow); transform: translateY(-3px); }
+
+    /* ── MODAL ── */
+    .modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(8,14,26,0.97);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; cursor: zoom-out;
+    }
+    .modal.hidden { display: none; }
+    .modal-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      color: rgba(255,255,255,0.5); font-size: 2.5rem; font-weight: 200;
+      cursor: pointer; background: none; border: none;
+      transition: color 0.2s; line-height: 1;
+    }
+    .modal-close:hover { color: var(--blue); }
+    .modal img { max-width: 100%; max-height: 90vh; object-fit: contain; border: 1px solid rgba(20,118,255,0.15); }
+    .modal-hint { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 10002;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), #6ab0ff);
+      box-shadow: 0 0 12px var(--blue-glow);
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    /* ── RIPPLE ── */
+    .ripple-btn { position: relative; overflow: hidden; }
+    .ripple-btn .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transform: scale(0); animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex !important; }
+      .phone-btn { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .render-photos-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; }
+      .page-header { padding: 7.5rem 0 3rem; }
+      .section-title { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+      .modal { padding: 1rem; }
+      .modal-close { top: 0.8rem; right: 1.2rem; }
+    }
+    @media (max-width: 480px) {
+      .container { width: calc(100% - 1.5rem); }
+      #mainNav { padding: 0.75rem 0; background: rgba(8,14,26,0.96); backdrop-filter: blur(14px); }
+      .brand img { width: 44px; height: 44px; }
+      .brand-name { font-size: 0.85rem; }
+      .brand-name span { font-size: 0.52rem; letter-spacing: 0.12em; }
+      .lang-toggle { padding: 0.45rem 0.65rem; font-size: 0.7rem; }
+      .nav-cta { gap: 0.6rem; }
+      .back-top { width: 42px; height: 42px; bottom: 1rem; left: 1rem; }
+      .wa-float { width: 50px; height: 50px; bottom: 1rem; right: 1rem; }
+      .footer-bottom { text-align: center; }
+    }
+
+    /* ── ACCESSIBILITY: REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SCROLL PROGRESS ── -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ── NAV ── -->
+  <header id="mainNav">
+    <div class="container">
+      <div class="nav-row">
+        <a class="brand" href="index.html">
+          <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" />
+          <div class="brand-name">
+            LCS Builder & Developer
+            <span>LLC — Puerto Rico</span>
+          </div>
+        </a>
+
+        <nav class="nav-links" aria-label="Navegación">
+          <a href="index.html#servicios" data-i18n="nav.servicios">Servicios</a>
+          <a href="index.html#proyectos" data-i18n="nav.proyectos">Proyectos</a>
+          <a href="renders.html" class="active" data-i18n="nav.renders">Renders 3D</a>
+          <a href="index.html#nosotros" data-i18n="nav.sobre">Sobre</a>
+          <a href="index.html#contacto" data-i18n="nav.contacto">Contacto</a>
+        </nav>
+
+        <div class="nav-cta">
+          <button class="lang-toggle" onclick="toggleLang()" aria-label="Cambiar idioma / Switch language">
+            <span class="lang-opt active" data-lang="es">ES</span><span class="lang-sep">/</span><span class="lang-opt" data-lang="en">EN</span>
+          </button>
+          <a class="phone-btn" href="https://wa.me/17879756407" target="_blank">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
+            787-975-6407
+          </a>
+          <button class="hamburger" id="hamburgerBtn" aria-label="Menú" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MOBILE OVERLAY ── -->
+  <div class="mobile-overlay" id="mobileOverlay">
+    <a class="mob-link" href="index.html#servicios" onclick="toggleMenu()" data-i18n="nav.servicios">Servicios</a>
+    <a class="mob-link" href="index.html#proyectos" onclick="toggleMenu()" data-i18n="nav.proyectos">Proyectos</a>
+    <a class="mob-link" href="renders.html" onclick="toggleMenu()" data-i18n="nav.renders">Renders 3D</a>
+    <a class="mob-link" href="index.html#nosotros" onclick="toggleMenu()" data-i18n="mob.sobre">Sobre Nosotros</a>
+    <a class="mob-link" href="index.html#contacto" onclick="toggleMenu()" data-i18n="nav.contacto">Contacto</a>
+    <div class="mob-divider"></div>
+    <a class="mob-cta" href="index.html#contacto" onclick="toggleMenu()" data-i18n="cta.cotizacion">Obtén una Cotización →</a>
+    <div class="mob-phone"><a href="tel:7879756407">787-975-6407</a></div>
+    <div class="mob-lang">
+      <button class="lang-toggle" onclick="toggleLang()" aria-label="Cambiar idioma / Switch language">
+        <span class="lang-opt active" data-lang="es">ES</span><span class="lang-sep">/</span><span class="lang-opt" data-lang="en">EN</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── PAGE HEADER ── -->
+  <section class="page-header">
+    <div class="page-header-orb"></div>
+    <div class="container reveal">
+      <a class="back-link" href="index.html" data-i18n="back.site">← Volver al sitio</a>
+      <div class="section-kicker"><div class="kicker-line"></div><span data-i18n="renders.kicker">Visualización arquitectónica</span></div>
+      <h1 class="section-title" data-i18n="renders.title">Renderizados 3D <em>que Cobran Vida</em></h1>
+      <p class="page-header-intro" data-i18n="renders.intro">Antes de poner la primera piedra, te mostramos exactamente cómo se va a ver tu proyecto. Renderizados fotorrealistas y recorridos en video para que tomes decisiones con confianza.</p>
+    </div>
+  </section>
+
+  <!-- ── RENDERS GALLERY ──
+       NOTA PARA SEBASTIÁN: las 7 fotos ya están comprimidas e incrustadas localmente en
+       renders/photos/ — no necesitan hosting externo, ya están listas en el repo.
+
+       Los videos SÍ necesitan hosting: los originales pesan entre 100MB y 2GB, demasiado
+       grandes para un repositorio de Git. Cada tile de video tiene un atributo data-src
+       con el texto REPLACE_WITH_HOSTED_URL — sustitúyelo por el enlace directo al .mp4
+       (Cloudinary, Bunny.net, etc.) y el reproductor a pantalla completa funcionará solo.
+       Mientras tanto, al presionar un video se muestra un aviso de "próximamente".
+       Las miniaturas ya son fotogramas reales de cada clip (renders/posters/).
+  -->
+  <section class="renders-main">
+    <div class="container">
+
+      <!-- Renders fotorrealistas -->
+      <div class="render-block reveal delay-1">
+        <div class="render-sub-kicker" data-i18n="photos.kicker">Renders fotorrealistas</div>
+        <h2 class="render-sub-title" data-i18n="photos.title">Imágenes de alta resolución</h2>
+
+        <div class="render-photos-grid">
+          <div class="render-hero-card" onclick="openModal('renders/photos/exterior-villa-estate.jpg')">
+            <img src="renders/photos/exterior-villa-estate.jpg" alt="Fachada principal al atardecer" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="render-hero-title" data-i18n="ph1.title">Fachada Principal al Atardecer</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/living-open-concept-ocean.jpg')">
+            <img src="renders/photos/living-open-concept-ocean.jpg" alt="Sala y cocina de concepto abierto con vista al mar" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.interior">Interior</div>
+              <div class="render-hero-title" data-i18n="ph2.title">Sala y Cocina — Concepto Abierto</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/bathroom-ocean-view.jpg')">
+            <img src="renders/photos/bathroom-ocean-view.jpg" alt="Baño principal con vista al mar" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.interior">Interior</div>
+              <div class="render-hero-title" data-i18n="ph3.title">Baño Principal con Vista al Mar</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/bedroom-ocean-view.jpg')">
+            <img src="renders/photos/bedroom-ocean-view.jpg" alt="Habitación principal con vista al mar" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.interior">Interior</div>
+              <div class="render-hero-title" data-i18n="ph4.title">Habitación Principal con Vista al Mar</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/exterior-bungalow-dusk-3.jpg')">
+            <img src="renders/photos/exterior-bungalow-dusk-3.jpg" alt="Residencia de un nivel al atardecer" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="render-hero-title" data-i18n="ph5.title">Residencia de Un Nivel al Atardecer</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/exterior-bungalow-dusk-1.jpg')">
+            <img src="renders/photos/exterior-bungalow-dusk-1.jpg" alt="Terraza envolvente al atardecer" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="render-hero-title" data-i18n="ph6.title">Terraza Envolvente</div>
+            </div>
+          </div>
+
+          <div class="render-hero-card" onclick="openModal('renders/photos/exterior-bungalow-dusk-2.jpg')">
+            <img src="renders/photos/exterior-bungalow-dusk-2.jpg" alt="Fachada lateral al atardecer" loading="lazy" decoding="async" />
+            <div class="render-overlay"></div>
+            <div class="render-zoom">🔍</div>
+            <div class="render-hero-info">
+              <div class="render-hero-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="render-hero-title" data-i18n="ph7.title">Fachada Lateral al Atardecer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recorridos en video -->
+      <div class="render-block reveal delay-2">
+        <div class="render-sub-kicker" data-i18n="videos.kicker">Recorridos en video</div>
+        <h2 class="render-sub-title" data-i18n="videos.title">Presiona para ver a pantalla completa</h2>
+
+        <div class="render-videos-grid">
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/sala-concepto-abierto.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-living-open-concept.jpg" alt="Recorrido de sala concepto abierto" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.interior">Interior</div>
+              <div class="video-tile-title" data-i18n="vd1.title">Sala Concepto Abierto</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/bano-principal.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-bathroom-walkthrough.jpg" alt="Recorrido del baño principal" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.interior">Interior</div>
+              <div class="video-tile-title" data-i18n="vd2.title">Baño Principal</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/habitacion-principal.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-bedroom-walkthrough.jpg" alt="Recorrido de la habitación principal" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.interior">Interior</div>
+              <div class="video-tile-title" data-i18n="vd3.title">Habitación Principal</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/cocina.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-kitchen-walkthrough.jpg" alt="Recorrido de la cocina" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.interior">Interior</div>
+              <div class="video-tile-title" data-i18n="vd4.title">Cocina</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/escalera-interior.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-stairs-walkthrough.jpg" alt="Recorrido de la escalera interior" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.interior">Interior</div>
+              <div class="video-tile-title" data-i18n="vd5.title">Escalera Interior</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/terraza-atardecer.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-facade-dusk-clip.jpg" alt="Recorrido de la terraza al atardecer" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd6.title">Terraza al Atardecer</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/patio-piscina.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-backyard-pool.jpg" alt="Recorrido del patio y la piscina" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd7.title">Patio y Piscina</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/fachada-atardecer.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-facade-vertical-dusk.jpg" alt="Recorrido de la fachada al atardecer" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd8.title">Fachada al Atardecer</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/fachada-frontal-dia.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-facade-vertical-day.jpg" alt="Recorrido de la fachada frontal de día" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd9.title">Fachada Frontal — Día</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/entrada-garaje-dia.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-facade-entrance-day.jpg" alt="Recorrido de la entrada y el garaje de día" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd10.title">Entrada y Garaje — Día</div>
+            </div>
+          </div>
+
+          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/camino-entrada.mp4" onclick="openVideo(this)">
+            <img src="renders/posters/poster-facade-vertical-dusk2.jpg" alt="Recorrido del camino de entrada" loading="lazy" decoding="async" />
+            <div class="video-tile-overlay"></div>
+            <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="video-tile-info">
+              <div class="video-tile-tag" data-i18n="tag.exterior">Exterior</div>
+              <div class="video-tile-title" data-i18n="vd11.title">Camino de Entrada y Jardín</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="renders-cta reveal delay-3">
+        <a class="btn-primary" href="index.html#contacto" data-i18n="renders.cta">Quiero un renderizado para mi proyecto →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <img src="https://i.postimg.cc/0Qvzs1WB/Untitled-(1).png" alt="Logo LCS" />
+            <div>
+              <div class="footer-brand-name">LCS Builder & Developer LLC</div>
+            </div>
+          </div>
+          <p class="footer-note" data-i18n="footer.note">Contratista general en Puerto Rico. Comprometidos con calidad, seguridad y entregas a tiempo.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title" data-i18n="footer.enlaces">Enlaces rápidos</div>
+          <div class="footer-links">
+            <a href="index.html#servicios" data-i18n="nav.servicios">Servicios</a>
+            <a href="index.html#proyectos" data-i18n="nav.proyectos">Proyectos</a>
+            <a href="index.html#nosotros" data-i18n="nav.sobre">Sobre</a>
+            <a href="index.html#contacto" data-i18n="nav.contacto">Contacto</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-title" data-i18n="footer.cert">Certificaciones</div>
+          <div class="footer-links">
+            <a href="#" data-i18n="footer.cert1">Licencia de Corredor de Bienes Raíces</a>
+            <a href="#" data-i18n="footer.cert2">Licencia de Contratista</a>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a class="phone-btn" href="https://wa.me/17879756407" target="_blank" style="display:inline-flex;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6.6 10.8c1.4 2.7 3.9 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.6.6 3.9.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.7.6 3.9.1.4 0 .8-.3 1.1L6.6 10.8Z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> LCS Builder & Developer LLC. <span data-i18n="footer.rights">Todos los derechos reservados.</span></span>
+        <span data-i18n="footer.made">Hecho con ❤️ en <span>Puerto Rico</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── WHATSAPP FLOAT ── -->
+  <a href="https://wa.me/17879756407" class="wa-float" target="_blank" aria-label="WhatsApp">
+    <svg width="26" height="26" fill="#fff" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.897-5.335 11.9-11.894a11.83 11.83 0 00-3.486-8.422z"/>
+    </svg>
+  </a>
+
+  <!-- ── BACK TO TOP ── -->
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba / Back to top">↑</button>
+
+  <!-- ── MODAL DE FOTO ── -->
+  <div id="photoModal" class="modal hidden" onclick="closeModal()">
+    <button class="modal-close">&times;</button>
+    <img id="modalImg" alt="Render ampliado">
+    <p class="modal-hint" data-i18n="modal.hint">Presiona en cualquier lugar para cerrar</p>
+  </div>
+
+  <!-- ── MODAL DE VIDEO (pantalla completa) ── -->
+  <div id="videoModal" class="video-modal hidden" onclick="if(event.target===this) closeVideo()">
+    <button class="modal-close" onclick="closeVideo()">&times;</button>
+    <div class="video-modal-inner">
+      <div id="videoWrap"></div>
+      <p class="video-modal-title" id="videoModalTitle"></p>
+    </div>
+  </div>
+
+  <script>
+    /* ── i18n ── */
+    const I18N = {
+      es: {
+        'meta.title': 'Renderizados 3D — LCS Builder & Developer',
+        'meta.desc': 'Galería de renderizados 3D fotorrealistas y recorridos en video de LCS Builder & Developer.',
+        'nav.servicios': 'Servicios',
+        'nav.proyectos': 'Proyectos',
+        'nav.renders': 'Renders 3D',
+        'nav.sobre': 'Sobre',
+        'nav.contacto': 'Contacto',
+        'mob.sobre': 'Sobre Nosotros',
+        'cta.cotizacion': 'Obtén una Cotización →',
+        'back.site': '← Volver al sitio',
+        'renders.kicker': 'Visualización arquitectónica',
+        'renders.title': 'Renderizados 3D <em>que Cobran Vida</em>',
+        'renders.intro': 'Antes de poner la primera piedra, te mostramos exactamente cómo se va a ver tu proyecto. Renderizados fotorrealistas y recorridos en video para que tomes decisiones con confianza.',
+        'tag.interior': 'Interior',
+        'tag.exterior': 'Exterior',
+        'photos.kicker': 'Renders fotorrealistas',
+        'photos.title': 'Imágenes de alta resolución',
+        'ph1.title': 'Fachada Principal al Atardecer',
+        'ph2.title': 'Sala y Cocina — Concepto Abierto',
+        'ph3.title': 'Baño Principal con Vista al Mar',
+        'ph4.title': 'Habitación Principal con Vista al Mar',
+        'ph5.title': 'Residencia de Un Nivel al Atardecer',
+        'ph6.title': 'Terraza Envolvente',
+        'ph7.title': 'Fachada Lateral al Atardecer',
+        'videos.kicker': 'Recorridos en video',
+        'videos.title': 'Presiona para ver a pantalla completa',
+        'vd1.title': 'Sala Concepto Abierto',
+        'vd2.title': 'Baño Principal',
+        'vd3.title': 'Habitación Principal',
+        'vd4.title': 'Cocina',
+        'vd5.title': 'Escalera Interior',
+        'vd6.title': 'Terraza al Atardecer',
+        'vd7.title': 'Patio y Piscina',
+        'vd8.title': 'Fachada al Atardecer',
+        'vd9.title': 'Fachada Frontal — Día',
+        'vd10.title': 'Entrada y Garaje — Día',
+        'vd11.title': 'Camino de Entrada y Jardín',
+        'video.soon': 'Este recorrido estará disponible en el sitio muy pronto. Mientras tanto, escríbenos por WhatsApp y te lo enviamos completo.',
+        'video.soonCta': 'Pídelo por WhatsApp →',
+        'renders.cta': 'Quiero un renderizado para mi proyecto →',
+        'footer.note': 'Contratista general en Puerto Rico. Comprometidos con calidad, seguridad y entregas a tiempo.',
+        'footer.enlaces': 'Enlaces rápidos',
+        'footer.cert': 'Certificaciones',
+        'footer.cert1': 'Licencia de Corredor de Bienes Raíces',
+        'footer.cert2': 'Licencia de Contratista',
+        'footer.rights': 'Todos los derechos reservados.',
+        'footer.made': 'Hecho con ❤️ en <span>Puerto Rico</span>',
+        'modal.hint': 'Presiona en cualquier lugar para cerrar',
+      },
+      en: {
+        'meta.title': '3D Renders — LCS Builder & Developer',
+        'meta.desc': 'Photorealistic 3D render gallery and video walkthroughs from LCS Builder & Developer.',
+        'nav.servicios': 'Services',
+        'nav.proyectos': 'Projects',
+        'nav.renders': '3D Renders',
+        'nav.sobre': 'About',
+        'nav.contacto': 'Contact',
+        'mob.sobre': 'About Us',
+        'cta.cotizacion': 'Get a Free Quote →',
+        'back.site': '← Back to site',
+        'renders.kicker': 'Architectural visualization',
+        'renders.title': '3D Renders <em>Brought to Life</em>',
+        'renders.intro': 'Before the first brick is laid, we show you exactly what your project will look like. Photorealistic renders and video walkthroughs so you can decide with confidence.',
+        'tag.interior': 'Interior',
+        'tag.exterior': 'Exterior',
+        'photos.kicker': 'Photorealistic renders',
+        'photos.title': 'High-resolution imagery',
+        'ph1.title': 'Main Facade at Dusk',
+        'ph2.title': 'Living Room & Kitchen — Open Concept',
+        'ph3.title': 'Primary Bathroom with Ocean View',
+        'ph4.title': 'Primary Bedroom with Ocean View',
+        'ph5.title': 'Single-Story Residence at Dusk',
+        'ph6.title': 'Wraparound Terrace',
+        'ph7.title': 'Side Facade at Dusk',
+        'videos.kicker': 'Video walkthroughs',
+        'videos.title': 'Tap to view fullscreen',
+        'vd1.title': 'Open Concept Living Room',
+        'vd2.title': 'Primary Bathroom',
+        'vd3.title': 'Primary Bedroom',
+        'vd4.title': 'Kitchen',
+        'vd5.title': 'Interior Staircase',
+        'vd6.title': 'Terrace at Dusk',
+        'vd7.title': 'Backyard & Pool',
+        'vd8.title': 'Facade at Dusk',
+        'vd9.title': 'Front Facade — Daytime',
+        'vd10.title': 'Entrance & Garage — Daytime',
+        'vd11.title': 'Entry Walkway & Garden',
+        'video.soon': 'This walkthrough will be available on the site very soon. In the meantime, message us on WhatsApp and we will send you the full video.',
+        'video.soonCta': 'Request it on WhatsApp →',
+        'renders.cta': 'I want a render for my project →',
+        'footer.note': 'General contractor in Puerto Rico. Committed to quality, safety and on-time delivery.',
+        'footer.enlaces': 'Quick links',
+        'footer.cert': 'Certifications',
+        'footer.cert1': 'Real Estate Broker License',
+        'footer.cert2': 'Contractor License',
+        'footer.rights': 'All rights reserved.',
+        'footer.made': 'Made with ❤️ in <span>Puerto Rico</span>',
+        'modal.hint': 'Tap anywhere to close',
+      }
+    };
+
+    let currentLang = localStorage.getItem('lcs-lang') || 'es';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lcs-lang', lang);
+      document.documentElement.lang = lang;
+      const dict = I18N[lang];
+      document.title = dict['meta.title'];
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', dict['meta.desc']);
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('.lang-opt').forEach(s => {
+        s.classList.toggle('active', s.dataset.lang === lang);
+      });
+    }
+
+    function toggleLang() {
+      applyLang(currentLang === 'es' ? 'en' : 'es');
+    }
+
+    applyLang(currentLang);
+
+    /* ── Year ── */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ── Nav scroll + progress bar + back-to-top ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('scrollProgress').style.width = (scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0) + '%';
+      document.getElementById('backTop').classList.toggle('show', window.scrollY > 700);
+    }, { passive: true });
+
+    /* ── Mobile menu ── */
+    function toggleMenu() {
+      const overlay = document.getElementById('mobileOverlay');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = overlay.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    /* ── Scroll reveal ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ── Photo modal ── */
+    function openModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('photoModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('photoModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    /* ── Video modal ──
+       Reproduce a pantalla completa. Mientras el data-src siga siendo el placeholder
+       (video sin alojar todavía) muestra un aviso en vez de un reproductor roto. */
+    function openVideo(tile) {
+      const src = tile.dataset.src || '';
+      const title = tile.querySelector('.video-tile-title').textContent;
+      const dict = I18N[currentLang];
+      const wrap = document.getElementById('videoWrap');
+
+      if (!src || src.indexOf('REPLACE_WITH_HOSTED_URL') === 0) {
+        wrap.innerHTML =
+          '<div class="video-soon"><p>' + dict['video.soon'] + '</p>' +
+          '<a class="btn-primary" href="https://wa.me/17879756407" target="_blank" rel="noopener">' +
+          dict['video.soonCta'] + '</a></div>';
+      } else {
+        const v = document.createElement('video');
+        v.src = src;
+        v.controls = true;
+        v.autoplay = true;
+        v.playsInline = true;
+        wrap.innerHTML = '';
+        wrap.appendChild(v);
+      }
+
+      document.getElementById('videoModalTitle').textContent = title;
+      document.getElementById('videoModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeVideo() {
+      document.getElementById('videoWrap').innerHTML = '';
+      document.getElementById('videoModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeVideo();
+        if (document.getElementById('mobileOverlay').classList.contains('open')) toggleMenu();
+      }
+    });
+
+    /* ── Ripple effect ── */
+    document.querySelectorAll('.btn-primary, .btn-ghost, .phone-btn').forEach(btn => {
+      btn.classList.add('ripple-btn');
+      btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 2;
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 650);
+      });
+    });
+  </script>
+</body>
+</html>
