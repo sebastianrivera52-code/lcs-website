@@ -381,8 +381,12 @@
     }
     .video-modal.hidden { display: none; }
     .video-modal-inner { width: min(1100px, 100%); }
+    /* width:auto para que los recorridos verticales no queden con barras
+       negras enormes a los lados; se centran y respetan su proporción */
     .video-modal video {
-      width: 100%; max-height: 80vh; display: block;
+      display: block; margin: 0 auto;
+      width: auto; height: auto;
+      max-width: 100%; max-height: 78vh;
       background: #000; border-radius: 8px;
       border: 1px solid rgba(20,118,255,0.15);
     }
@@ -390,12 +394,6 @@
       text-align: center; margin-top: 1rem;
       font-family: 'Playfair Display', serif; font-size: 1.05rem; color: #fff;
     }
-    .video-soon {
-      padding: 3.5rem 2rem; text-align: center;
-      border: 1px solid rgba(20,118,255,0.22); border-radius: 10px;
-      background: rgba(20,118,255,0.05);
-    }
-    .video-soon p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.4rem; }
 
     .renders-cta { margin-top: 3.5rem; text-align: center; }
 
@@ -611,15 +609,19 @@
   </section>
 
   <!-- ── RENDERS GALLERY ──
-       NOTA PARA SEBASTIÁN: las 7 fotos ya están comprimidas e incrustadas localmente en
-       renders/photos/ — no necesitan hosting externo, ya están listas en el repo.
+       Todo el contenido vive dentro del repo, sin depender de servicios externos:
+         renders/photos/   fotos comprimidas para web
+         renders/posters/  miniaturas (fotograma real de cada video)
+         renders/videos/   recorridos recomprimidos a 720p H.264 sin audio
 
-       Los videos SÍ necesitan hosting: los originales pesan entre 100MB y 2GB, demasiado
-       grandes para un repositorio de Git. Cada tile de video tiene un atributo data-src
-       con el texto REPLACE_WITH_HOSTED_URL — sustitúyelo por el enlace directo al .mp4
-       (Cloudinary, Bunny.net, etc.) y el reproductor a pantalla completa funcionará solo.
-       Mientras tanto, al presionar un video se muestra un aviso de "próximamente".
-       Las miniaturas ya son fotogramas reales de cada clip (renders/posters/).
+       Los originales (carpeta Renderings, 100MB–2GB cada uno) NO se suben: estaban a
+       un bitrate de archivo maestro (hasta 1.2 Gbps) y a 120fps. Para añadir un video
+       nuevo, recomprímelo antes con:
+
+         ffmpeg -i ORIGINAL.mp4 \
+           -vf "scale=w=1280:h=1280:force_original_aspect_ratio=decrease:force_divisible_by=2,fps=30" \
+           -c:v libx264 -preset slow -crf 28 -maxrate 3500k -bufsize 7000k \
+           -pix_fmt yuv420p -an -movflags +faststart renders/videos/NOMBRE.mp4
   -->
   <section class="renders-main">
     <div class="container">
@@ -708,7 +710,7 @@
         <h2 class="render-sub-title" data-i18n="videos.title">Presiona para ver a pantalla completa</h2>
 
         <div class="render-videos-grid">
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/sala-concepto-abierto.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/sala-concepto-abierto.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-living-open-concept.jpg" alt="Recorrido de sala concepto abierto" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -718,7 +720,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/bano-principal.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/bano-principal.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-bathroom-walkthrough.jpg" alt="Recorrido del baño principal" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -728,7 +730,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/habitacion-principal.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/habitacion-principal.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-bedroom-walkthrough.jpg" alt="Recorrido de la habitación principal" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -738,7 +740,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/cocina.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/cocina.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-kitchen-walkthrough.jpg" alt="Recorrido de la cocina" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -748,7 +750,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/escalera-interior.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/escalera-interior.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-stairs-walkthrough.jpg" alt="Recorrido de la escalera interior" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -758,7 +760,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/terraza-atardecer.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/terraza-atardecer.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-facade-dusk-clip.jpg" alt="Recorrido de la terraza al atardecer" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -768,7 +770,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/patio-piscina.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/patio-piscina.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-backyard-pool.jpg" alt="Recorrido del patio y la piscina" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -778,7 +780,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/fachada-atardecer.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/fachada-atardecer.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-facade-vertical-dusk.jpg" alt="Recorrido de la fachada al atardecer" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -788,7 +790,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/fachada-frontal-dia.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/fachada-frontal-dia.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-facade-vertical-day.jpg" alt="Recorrido de la fachada frontal de día" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -798,7 +800,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/entrada-garaje-dia.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/entrada-garaje-dia.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-facade-entrance-day.jpg" alt="Recorrido de la entrada y el garaje de día" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -808,7 +810,7 @@
             </div>
           </div>
 
-          <div class="video-tile" data-src="REPLACE_WITH_HOSTED_URL/camino-entrada.mp4" onclick="openVideo(this)">
+          <div class="video-tile" data-src="renders/videos/camino-entrada.mp4" onclick="openVideo(this)">
             <img src="renders/posters/poster-facade-vertical-dusk2.jpg" alt="Recorrido del camino de entrada" loading="lazy" decoding="async" />
             <div class="video-tile-overlay"></div>
             <div class="video-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
@@ -939,8 +941,6 @@
         'vd9.title': 'Fachada Frontal — Día',
         'vd10.title': 'Entrada y Garaje — Día',
         'vd11.title': 'Camino de Entrada y Jardín',
-        'video.soon': 'Este recorrido estará disponible en el sitio muy pronto. Mientras tanto, escríbenos por WhatsApp y te lo enviamos completo.',
-        'video.soonCta': 'Pídelo por WhatsApp →',
         'renders.cta': 'Quiero un renderizado para mi proyecto →',
         'footer.note': 'Contratista general en Puerto Rico. Comprometidos con calidad, seguridad y entregas a tiempo.',
         'footer.enlaces': 'Enlaces rápidos',
@@ -989,8 +989,6 @@
         'vd9.title': 'Front Facade — Daytime',
         'vd10.title': 'Entrance & Garage — Daytime',
         'vd11.title': 'Entry Walkway & Garden',
-        'video.soon': 'This walkthrough will be available on the site very soon. In the meantime, message us on WhatsApp and we will send you the full video.',
-        'video.soonCta': 'Request it on WhatsApp →',
         'renders.cta': 'I want a render for my project →',
         'footer.note': 'General contractor in Puerto Rico. Committed to quality, safety and on-time delivery.',
         'footer.enlaces': 'Quick links',
@@ -1065,31 +1063,25 @@
       document.body.style.overflow = '';
     }
 
-    /* ── Video modal ──
-       Reproduce a pantalla completa. Mientras el data-src siga siendo el placeholder
-       (video sin alojar todavía) muestra un aviso en vez de un reproductor roto. */
+    /* ── Video modal ── Reproduce el recorrido a pantalla completa. */
     function openVideo(tile) {
-      const src = tile.dataset.src || '';
-      const title = tile.querySelector('.video-tile-title').textContent;
-      const dict = I18N[currentLang];
       const wrap = document.getElementById('videoWrap');
+      const poster = tile.querySelector('img');
 
-      if (!src || src.indexOf('REPLACE_WITH_HOSTED_URL') === 0) {
-        wrap.innerHTML =
-          '<div class="video-soon"><p>' + dict['video.soon'] + '</p>' +
-          '<a class="btn-primary" href="https://wa.me/17879756407" target="_blank" rel="noopener">' +
-          dict['video.soonCta'] + '</a></div>';
-      } else {
-        const v = document.createElement('video');
-        v.src = src;
-        v.controls = true;
-        v.autoplay = true;
-        v.playsInline = true;
-        wrap.innerHTML = '';
-        wrap.appendChild(v);
-      }
+      const v = document.createElement('video');
+      v.src = tile.dataset.src;
+      v.poster = poster ? poster.getAttribute('src') : '';
+      v.controls = true;
+      v.autoplay = true;
+      v.loop = true;
+      v.muted = true;        // los renders no tienen audio; permite el autoplay
+      v.playsInline = true;
+      v.preload = 'auto';
+      wrap.innerHTML = '';
+      wrap.appendChild(v);
 
-      document.getElementById('videoModalTitle').textContent = title;
+      document.getElementById('videoModalTitle').textContent =
+        tile.querySelector('.video-tile-title').textContent;
       document.getElementById('videoModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
